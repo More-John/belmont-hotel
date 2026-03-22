@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, Star } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import belmontLogo from "@/assets/belmont-logo.png";
 
 const navItems = [
     { label: "HOME", href: "#home" },
@@ -26,15 +27,13 @@ export function SideNav() {
         <>
             {/* Desktop side nav */}
             <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-20 z-50 bg-hotel-black flex-col items-center py-8 justify-between">
-                <div className="flex flex-col items-center gap-1">
-                    <div className="flex gap-0.5 mb-1">
-                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                    </div>
-                    <span className="font-display text-2xl font-bold text-hotel-white tracking-wider">B</span>
+                <div className="flex flex-col items-center w-full px-2">
+                    {/* Constrained to w-16 to fit perfectly inside the w-20 sidebar */}
+                    <img
+                        src={belmontLogo.src}
+                        alt="Belmont Logo"
+                        className="w-16 h-auto object-contain"
+                    />
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
@@ -43,8 +42,8 @@ export function SideNav() {
                             key={item.href}
                             onClick={() => handleClick(item.href)}
                             className={`w-3 h-3 rounded-full transition-colors ${activeSection === item.href.replace("#", "")
-                                ? "bg-hotel-gold"
-                                : "bg-hotel-white"
+                                    ? "bg-hotel-gold"
+                                    : "bg-hotel-white"
                                 }`}
                             title={item.label}
                             aria-label={item.label}
@@ -75,13 +74,13 @@ export function SideNav() {
                         <X className="w-8 h-8 text-hotel-white" />
                     </button>
 
-                    <div className="flex flex-col items-center gap-1 mb-8">
-                        <div className="flex gap-0.5 mb-1">
-                            <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                            <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                            <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
-                        </div>
-                        <span className="font-display text-3xl font-bold text-hotel-white">BELMONT</span>
+                    <div className="flex flex-col items-center mb-8">
+                        {/* Larger logo for the mobile menu overlay */}
+                        <img
+                            src="/belmont-logo.jpg"
+                            alt="Belmont Logo"
+                            className="w-48 md:w-64 h-auto object-contain"
+                        />
                     </div>
 
                     {navItems.map((item) => (
