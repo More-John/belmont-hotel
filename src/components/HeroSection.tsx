@@ -74,6 +74,8 @@ export function HeroSection() {
           <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
           <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
           <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
+          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
+          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
         </div>
 
         <h1 className="font-display text-6xl md:text-8xl font-bold text-hotel-white tracking-wider mb-4">

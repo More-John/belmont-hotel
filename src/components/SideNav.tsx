@@ -31,6 +31,8 @@ export function SideNav() {
                         <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
                         <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
                         <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
+                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
+                        <Star className="w-3 h-3 fill-hotel-gold text-hotel-gold" />
                     </div>
                     <span className="font-display text-2xl font-bold text-hotel-white tracking-wider">B</span>
                 </div>

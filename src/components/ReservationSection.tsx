@@ -12,7 +12,7 @@ export function ReservationSection() {
     };
 
     return (
-        <section id="reservation" className="bg-hotel-gold py-20 px-4">
+        <section id="reservation" className="bg-hotel-black py-20 px-4">
             <div className="max-w-5xl mx-auto">
                 <h2 className="font-display text-3xl md:text-5xl text-hotel-white tracking-wider text-center mb-12">
                     RESERVATION
@@ -52,7 +52,7 @@ export function ReservationSection() {
 
                     <div className="text-center">
                         <button type="submit"
-                            className="bg-hotel-dark text-hotel-white font-body tracking-[0.3em] text-sm px-10 py-4 hover:bg-hotel-black transition-colors">
+                            className="bg-hotel-white text-hotel-black font-body tracking-[0.3em] text-sm px-10 py-4 hover:bg-hotel-dark transition-colors">
                             RESERVE NOW
                         </button>
                     </div>

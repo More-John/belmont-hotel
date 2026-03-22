@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function ContactSection() {
+export function InquirySection() {
     const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -10,10 +10,10 @@ export function ContactSection() {
     };
 
     return (
-        <section id="contacts" className="bg-background py-20 px-4">
+        <section id="inquiry" className="bg-background py-20 px-4">
             <div className="max-w-5xl mx-auto">
                 <h2 className="font-display text-3xl md:text-5xl text-foreground tracking-wider text-center mb-12">
-                    CONTACTS
+                    INQUIRY
                 </h2>
 
                 <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>

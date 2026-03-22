@@ -23,9 +23,9 @@ export function ServicesSection() {
                         ADDITIONAL SERVICES
                     </h2>
                     <p className="font-body text-hotel-white/70 leading-relaxed">
-                        With a prime location, there is no better place to relax after a hard day's…relaxing.
-                        A spectacular view is complemented by the stunning new bars, and beautifully restored historic building.
-                        Relaxed welcoming service, great food, cold beer, and an impeccable wine list, make Belmont Hotel the perfect place to stop.
+                        With its convenient location, Belmont Hotel offers the perfect escape after a busy day.
+                        Enjoy spectacular views and beautiful architecture, all complemented by relaxed,
+                        welcoming service, delicious food, and an impeccable wine list. It is the ideal place to unwind.
                     </p>
                 </div>
             </div>
