@@ -42,8 +42,8 @@ export function SideNav() {
                             key={item.href}
                             onClick={() => handleClick(item.href)}
                             className={`w-3 h-3 rounded-full transition-colors ${activeSection === item.href.replace("#", "")
-                                    ? "bg-hotel-gold"
-                                    : "bg-hotel-white"
+                                ? "bg-hotel-gold"
+                                : "bg-hotel-white"
                                 }`}
                             title={item.label}
                             aria-label={item.label}
@@ -77,7 +77,7 @@ export function SideNav() {
                     <div className="flex flex-col items-center mb-8">
                         {/* Larger logo for the mobile menu overlay */}
                         <img
-                            src="/belmont-logo.jpg"
+                            src={belmontLogo.src}
                             alt="Belmont Logo"
                             className="w-48 md:w-64 h-auto object-contain"
                         />

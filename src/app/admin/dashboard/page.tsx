@@ -2,19 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, Image as ImageIcon, MessageSquare, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, Image as ImageIcon, MessageSquare, CalendarDays, LogOut, Menu, X } from "lucide-react";
 import NextImage from "next/image";
 import logo from "@/assets/belmont-logo.png";
 import { AdminOverview } from "@/components/admin/AdminOverview";
 import { AdminImages } from "@/components/admin/AdminImages";
 import { AdminInquiries } from "@/components/admin/AdminInquiries";
+import { AdminReservations } from "@/components/admin/AdminReservations";   // <-- import
 
-type Tab = "overview" | "images" | "inquiries";
+type Tab = "overview" | "images" | "inquiries" | "reservations";   // <-- add "reservations"
 
 const navItems: { id: Tab; label: string; icon: React.ElementType }[] = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
     { id: "images", label: "Images", icon: ImageIcon },
     { id: "inquiries", label: "Inquiries", icon: MessageSquare },
+    { id: "reservations", label: "Reservations", icon: CalendarDays },   // <-- new tab
 ];
 
 export default function AdminDashboard() {
@@ -51,8 +53,8 @@ export default function AdminDashboard() {
                             key={item.id}
                             onClick={() => setActiveTab(item.id)}
                             className={`w-full flex items-center gap-3 px-4 py-3 font-body text-sm transition-colors ${activeTab === item.id
-                                ? "bg-hotel-gold/20 text-hotel-gold border-l-2 border-hotel-gold"
-                                : "text-hotel-white/70 hover:text-hotel-white hover:bg-hotel-black/30"
+                                    ? "bg-hotel-gold/20 text-hotel-gold border-l-2 border-hotel-gold"
+                                    : "text-hotel-white/70 hover:text-hotel-white hover:bg-hotel-black/30"
                                 }`}
                         >
                             <item.icon className="w-4 h-4" />
@@ -93,8 +95,8 @@ export default function AdminDashboard() {
                                     setMobileMenuOpen(false);
                                 }}
                                 className={`w-full flex items-center gap-3 px-4 py-3 font-body text-sm transition-colors ${activeTab === item.id
-                                    ? "bg-hotel-gold/20 text-hotel-gold"
-                                    : "text-hotel-white/70"
+                                        ? "bg-hotel-gold/20 text-hotel-gold"
+                                        : "text-hotel-white/70"
                                     }`}
                             >
                                 <item.icon className="w-5 h-5" />
@@ -112,11 +114,12 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* Main Content – where the tab components are actually rendered */}
+            {/* Main Content – now includes Reservations */}
             <main className="flex-1 md:p-8 p-4 pt-20 md:pt-8 overflow-auto">
                 {activeTab === "overview" && <AdminOverview />}
                 {activeTab === "images" && <AdminImages />}
                 {activeTab === "inquiries" && <AdminInquiries />}
+                {activeTab === "reservations" && <AdminReservations />}   {/* <-- new */}
             </main>
         </div>
     );

@@ -6,9 +6,49 @@ export function ReservationSection() {
     const [form, setForm] = useState({
         name: "", email: "", phone: "", roomType: "", checkIn: "", checkOut: "", persons: "",
     });
+    const [loading, setLoading] = useState(false); // ✅ added loading state
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        // Use form state values directly instead of FormData to avoid mismatched field names
+        const data = {
+            guestName: form.name,
+            guestEmail: form.email,
+            guestPhone: form.phone,
+            roomType: form.roomType,
+            checkIn: form.checkIn,
+            checkOut: form.checkOut,
+            persons: Number(form.persons),
+            specialRequests: "", // add a textarea if needed
+        };
+
+        try {
+            const res = await fetch("/api/reservations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            if (res.ok) {
+                alert("Reservation request sent! We'll contact you soon.");
+                // Reset form
+                setForm({
+                    name: "", email: "", phone: "", roomType: "", checkIn: "", checkOut: "", persons: "",
+                });
+            } else {
+                alert("Something went wrong. Please try again.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Network error. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -18,29 +58,54 @@ export function ReservationSection() {
                     RESERVATION
                 </h2>
 
-                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                <form className="space-y-6" onSubmit={handleSubmit}> {/* ✅ fixed onSubmit */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input name="name" placeholder="Name" value={form.name} onChange={handleChange}
+                        <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white placeholder:text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white" />
-                        <input name="email" type="email" placeholder="E-mail" value={form.email} onChange={handleChange}
+                        <input name="email" type="email" placeholder="E-mail" value={form.email} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white placeholder:text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white" />
-                        <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange}
+                        <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white placeholder:text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <select name="roomType" aria-label="Room type" value={form.roomType} onChange={handleChange}
+                        <select name="roomType" aria-label="Room type" value={form.roomType} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white">
                             <option value="" className="text-hotel-black">Room type</option>
                             <option value="executive" className="text-hotel-black">Executive</option>
                             <option value="deluxe-double" className="text-hotel-black">Deluxe Double</option>
                             <option value="one-bedroom" className="text-hotel-black">One-Bedroom</option>
                         </select>
-                        <input name="checkIn" type="date" placeholder="Check-in date" value={form.checkIn} onChange={handleChange}
-                            className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white" />
-                        <input name="checkOut" type="date" placeholder="Check-out date" value={form.checkOut} onChange={handleChange}
-                            className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white" />
-                        <select name="persons" aria-label="Persons" value={form.persons} onChange={handleChange}
+
+                        <input
+                            name="checkIn"
+                            type="text"
+                            placeholder="Check-in date"
+                            value={form.checkIn}
+                            onChange={handleChange}
+                            onFocus={(e) => (e.target.type = "date")}
+                            onBlur={(e) => {
+                                if (!e.target.value) e.target.type = "text";
+                            }}
+                            required
+                            className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white"
+                        />
+
+                        <input
+                            name="checkOut"
+                            type="text"
+                            placeholder="Check-out date"
+                            value={form.checkOut}
+                            onChange={handleChange}
+                            onFocus={(e) => (e.target.type = "date")}
+                            onBlur={(e) => {
+                                if (!e.target.value) e.target.type = "text";
+                            }}
+                            required
+                            className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white"
+                        />
+
+                        <select name="persons" aria-label="Persons" value={form.persons} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white">
                             <option value="" className="text-hotel-black">Persons</option>
                             <option value="1" className="text-hotel-black">1</option>
@@ -51,9 +116,9 @@ export function ReservationSection() {
                     </div>
 
                     <div className="text-center">
-                        <button type="submit"
-                            className="bg-hotel-white text-hotel-black font-body tracking-[0.3em] text-sm px-10 py-4 hover:bg-hotel-dark transition-colors">
-                            RESERVE NOW
+                        <button type="submit" disabled={loading}
+                            className="bg-hotel-white text-hotel-black font-body tracking-[0.3em] text-sm px-10 py-4 hover:bg-hotel-dark transition-colors disabled:opacity-50">
+                            {loading ? "SENDING..." : "RESERVE NOW"}
                         </button>
                     </div>
                 </form>
