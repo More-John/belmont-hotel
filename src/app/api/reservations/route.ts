@@ -27,7 +27,6 @@ export async function POST(request: Request) {
                 checkIn: new Date(body.checkIn),
                 checkOut: new Date(body.checkOut),
                 persons: body.persons,
-                specialRequests: body.specialRequests,
                 status: 'pending',
             },
         });

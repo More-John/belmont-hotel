@@ -87,6 +87,16 @@
   width: 6px;
 }
 
+/* Make date input calendar icon white */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* For Firefox (uses a different pseudo) – not directly stylable, but color-scheme helps */
+input[type="date"] {
+  color-scheme: dark;
+}
+
 ::-webkit-scrollbar-track {
   background: hsl(var(--hotel-black));
 }

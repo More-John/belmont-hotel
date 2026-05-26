@@ -22,10 +22,28 @@ export async function sendReservationEmail(reservation: any) {
     <p><strong>Room Type:</strong> ${reservation.roomType}</p>
     <p><strong>Check-in:</strong> ${new Date(reservation.checkIn).toLocaleDateString()}</p>
     <p><strong>Check-out:</strong> ${new Date(reservation.checkOut).toLocaleDateString()}</p>
-    <p><strong>Adults:</strong> ${reservation.adults}, <strong>Children:</strong> ${reservation.children}</p>
-    <p><strong>Special Requests:</strong> ${reservation.specialRequests || 'None'}</p>
+    <p><strong>Persons:</strong> ${reservation.persons}</p>
   `;
 
+    await transporter.sendMail({
+        from: `"Belmont Hotel" <${process.env.SMTP_FROM}>`,
+        to: adminEmail,
+        subject,
+        html,
+    });
+}
+
+export async function sendInquiryEmail(inquiry: any) {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const subject = `New Inquiry from ${inquiry.name}`;
+    const html = `
+    <h2>New Contact Inquiry</h2>
+    <p><strong>Name:</strong> ${inquiry.name}</p>
+    <p><strong>Email:</strong> ${inquiry.email}</p>
+    <p><strong>Phone:</strong> ${inquiry.phone || 'Not provided'}</p>
+    <p><strong>Subject:</strong> ${inquiry.subject}</p>
+    <p><strong>Message:</strong><br/>${inquiry.message.replace(/\n/g, '<br/>')}</p>
+  `;
     await transporter.sendMail({
         from: `"Belmont Hotel" <${process.env.SMTP_FROM}>`,
         to: adminEmail,

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendInquiryEmail } from '@/lib/email';
 
 export async function GET() {
     try {
@@ -20,18 +21,20 @@ export async function POST(request: Request) {
                 name: body.name,
                 email: body.email,
                 phone: body.phone || null,
-                subject: body.subject,
+                subject: body.subject || null,
                 message: body.message,
                 status: 'unread',
             },
         });
+        // Send email notification to admin
+        await sendInquiryEmail(inquiry);
         return NextResponse.json(inquiry, { status: 201 });
     } catch (error) {
+        console.error(error);
         return NextResponse.json({ error: 'Failed to create inquiry' }, { status: 500 });
     }
 }
 
-// Optional: PATCH to mark as read, DELETE to remove
 export async function PATCH(request: Request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

@@ -50,31 +50,46 @@ export function AdminOverview() {
 
     useEffect(() => {
         async function fetchDashboardData() {
+            let images = [];
+            let inquiries: Inquiry[] = [];
+            let reservations: Reservation[] = [];
+
+            // Fetch images (optional, if endpoint exists)
             try {
-                const imagesRes = await fetch("/api/images");
-                const images = await imagesRes.json();
-
-                const inquiriesRes = await fetch("/api/inquiries");
-                const inquiries: Inquiry[] = await inquiriesRes.json();
-                const unreadInquiries = inquiries.filter((i) => i.status === "unread");
-                const latestInquiries = inquiries.slice(0, 5);
-
-                const reservationsRes = await fetch("/api/reservations");
-                const reservations: Reservation[] = await reservationsRes.json();
-                const latestReservations = reservations.slice(0, 5);
-
-                setStats({
-                    totalImages: images.length,
-                    newInquiries: unreadInquiries.length,
-                    totalReservations: reservations.length,
-                });
-                setRecentInquiries(latestInquiries);
-                setRecentReservations(latestReservations);
-            } catch (error) {
-                console.error("Failed to fetch dashboard data:", error);
-            } finally {
-                setLoading(false);
+                const res = await fetch("/api/images");
+                if (res.ok) images = await res.json();
+            } catch (err) {
+                console.error("Images fetch failed:", err);
             }
+
+            // Fetch inquiries
+            try {
+                const res = await fetch("/api/inquiries");
+                if (res.ok) inquiries = await res.json();
+            } catch (err) {
+                console.error("Inquiries fetch failed:", err);
+            }
+
+            // Fetch reservations
+            try {
+                const res = await fetch("/api/reservations");
+                if (res.ok) reservations = await res.json();
+            } catch (err) {
+                console.error("Reservations fetch failed:", err);
+            }
+
+            const unreadInquiries = inquiries.filter((i) => i.status === "unread");
+            const latestInquiries = inquiries.slice(0, 5);
+            const latestReservations = reservations.slice(0, 5);
+
+            setStats({
+                totalImages: images.length,
+                newInquiries: unreadInquiries.length,
+                totalReservations: reservations.length,
+            });
+            setRecentInquiries(latestInquiries);
+            setRecentReservations(latestReservations);
+            setLoading(false);
         }
 
         fetchDashboardData();

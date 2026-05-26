@@ -1,5 +1,13 @@
 "use client";
 
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
+
 import { useState, useRef } from "react";
 import { Plus, Trash2, X } from "lucide-react";
 import Image from "next/image";
@@ -15,6 +23,8 @@ import serviceMinibar from "@/assets/service-minibar.jpg";
 import serviceEvent from "@/assets/service-event.jpg";
 import serviceConference from "@/assets/service-conference.jpg";
 import type { StaticImageData } from "next/image";
+import { Button } from "@/components/ui/button";
+
 
 // For user‑uploaded images we store the object URL as string
 type ImageItem = {
@@ -106,6 +116,20 @@ export function AdminImages() {
         setUploadSection("Hero");
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
+    <Dialog open={showUpload} onOpenChange={setShowUpload}>
+        <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900">
+            <DialogHeader>
+                <DialogTitle>Upload New Image</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+                {/* file input, label input, section select */}
+            </div>
+            <DialogFooter>
+                <Button variant="outline" onClick={closeUploadModal}>Cancel</Button>
+                <Button onClick={handleUpload}>Upload</Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 
     return (
         <div>

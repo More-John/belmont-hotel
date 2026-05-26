@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function ReservationSection() {
     const [form, setForm] = useState({
@@ -25,7 +26,6 @@ export function ReservationSection() {
             checkIn: form.checkIn,
             checkOut: form.checkOut,
             persons: Number(form.persons),
-            specialRequests: "", // add a textarea if needed
         };
 
         try {
@@ -35,21 +35,23 @@ export function ReservationSection() {
                 body: JSON.stringify(data),
             });
             if (res.ok) {
-                alert("Reservation request sent! We'll contact you soon.");
+                toast.success("Reservation request sent! We'll contact you soon.");
                 // Reset form
                 setForm({
                     name: "", email: "", phone: "", roomType: "", checkIn: "", checkOut: "", persons: "",
                 });
             } else {
-                alert("Something went wrong. Please try again.");
+                const error = await res.json();
+                toast.error(error.error || "Something went wrong. Please try again.");
             }
         } catch (error) {
             console.error(error);
-            alert("Network error. Please try again.");
+            toast.error("Network error. Please try again.");
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <section id="reservation" className="bg-hotel-black py-20 px-4">
@@ -58,7 +60,7 @@ export function ReservationSection() {
                     RESERVATION
                 </h2>
 
-                <form className="space-y-6" onSubmit={handleSubmit}> {/* ✅ fixed onSubmit */}
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white placeholder:text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white" />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function InquirySection() {
     const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
@@ -16,7 +17,7 @@ export function InquirySection() {
         const data = {
             name: form.name,
             email: form.email,
-            phone: form.phone,
+            phone: form.phone || null,
             subject: form.subject,
             message: form.message,
         };
@@ -27,13 +28,14 @@ export function InquirySection() {
                 body: JSON.stringify(data),
             });
             if (res.ok) {
-                alert("Inquiry sent! We'll get back to you soon.");
+                toast.success("Inquiry sent! We'll get back to you soon.");
                 setForm({ name: "", email: "", phone: "", subject: "", message: "" });
             } else {
-                alert("Failed to send inquiry. Please try again.");
+                const error = await res.json();
+                toast.error(error.error || "Failed to send inquiry. Please try again.");
             }
         } catch (error) {
-            alert("An error occurred. Please try again.");
+            toast.error("An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
