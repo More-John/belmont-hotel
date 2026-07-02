@@ -1,19 +1,49 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { UtensilsCrossed, Wine, PartyPopper, Presentation } from "lucide-react";
 import restaurantImg from "@/assets/service-restaurant.jpg";
 import minibarImg from "@/assets/service-minibar.jpg";
 import eventImg from "@/assets/service-event.jpg";
 import conferenceImg from "@/assets/service-conference.jpg";
 
-const services = [
-    { icon: UtensilsCrossed, label: "RESTAURANT", image: restaurantImg },
-    { icon: Wine, label: "MINI BAR", image: minibarImg },
-    { icon: PartyPopper, label: "EVENT CENTER", image: eventImg },
-    { icon: Presentation, label: "CONFERENCE HALL", image: conferenceImg },
+const defaultServices = [
+    { icon: UtensilsCrossed, label: "RESTAURANT", image: restaurantImg.src },
+    { icon: Wine, label: "MINI BAR", image: minibarImg.src },
+    { icon: PartyPopper, label: "EVENT CENTER", image: eventImg.src },
+    { icon: Presentation, label: "CONFERENCE HALL", image: conferenceImg.src },
 ];
 
 export function ServicesSection() {
+    const [services, setServices] = useState(defaultServices);
+
+    useEffect(() => {
+        async function fetchImages() {
+            try {
+                const res = await fetch("/api/images");
+                if (res.ok) {
+                    const data = await res.json();
+                    const serviceImages = data.filter((img: any) => img.section === "Services");
+                    if (serviceImages.length > 0) {
+                        setServices((prev) => prev.map(service => {
+                            const uploaded = serviceImages.find((img: any) =>
+                                img.alt?.toLowerCase().includes(service.label.toLowerCase()) ||
+                                service.label.toLowerCase().includes(img.alt?.toLowerCase() || '')
+                            );
+                            if (uploaded) {
+                                return { ...service, image: uploaded.url };
+                            }
+                            return service;
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchImages();
+    }, []);
+
     return (
         <section id="services">
             {/* Text area */}
@@ -34,7 +64,7 @@ export function ServicesSection() {
             <div className="grid grid-cols-1 md:grid-cols-4">
                 {services.map((s) => (
                     <div key={s.label} className="relative h-64 md:h-80 group overflow-hidden">
-                        <img src={s.image.src} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img src={s.image} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div className="absolute inset-0 bg-hotel-black/50 flex flex-col items-center justify-center gap-3">
                             <s.icon className="w-10 h-10 text-hotel-gold" strokeWidth={1.5} />
                             <span className="font-body text-sm tracking-[0.3em] text-hotel-white font-bold">

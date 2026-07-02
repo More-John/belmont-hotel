@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import roomLuxury from "@/assets/room-luxury.jpg";
 import roomJunior from "@/assets/room-junior.jpg";
@@ -8,7 +8,7 @@ import roomEconomy from "@/assets/room-economy.jpg";
 import { RoomDetailModal, type Room } from "@/components/RoomDetailModal";
 
 // Extended room data including modal-specific fields
-const rooms: Room[] = [
+const defaultRooms: Room[] = [
   {
     id: "executive",
     label: "EXECUTIVE",
@@ -56,9 +56,38 @@ const rooms: Room[] = [
 ];
 
 export function RoomsSection() {
+  const [rooms, setRooms] = useState(defaultRooms);
   const [activeIdx, setActiveIdx] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        const res = await fetch("/api/images");
+        if (res.ok) {
+          const data = await res.json();
+          const roomImages = data.filter((img: any) => img.section === "Rooms");
+          if (roomImages.length > 0) {
+            setRooms((prev) => prev.map(room => {
+              const uploaded = roomImages.find((img: any) => 
+                  img.alt?.toLowerCase().includes(room.label.toLowerCase()) || 
+                  room.label.toLowerCase().includes(img.alt?.toLowerCase() || '')
+              );
+              if (uploaded) {
+                return { ...room, image: { src: uploaded.url, height: 0, width: 0 } as any };
+              }
+              return room;
+            }));
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchImages();
+  }, []);
+
   const currentRoom = rooms[activeIdx];
 
   const handleViewDetails = () => {
@@ -72,8 +101,6 @@ export function RoomsSection() {
     if (reservationSection) {
       reservationSection.scrollIntoView({ behavior: "smooth" });
     }
-    // Optional: pre-fill room type in reservation form
-    // You can pass the room label via a global store or prop callback
   };
 
   return (

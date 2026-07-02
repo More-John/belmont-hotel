@@ -7,23 +7,45 @@ import heroExterior from "@/assets/hero-exterior.jpg";
 import heroSuite from "@/assets/hero-suite.jpg";
 import heroLounge from "@/assets/hero-lounge.jpg";
 
-const slides = [
-  { image: heroLobby, alt: "Grand hotel lobby" },
-  { image: heroExterior, alt: "Hotel exterior at dusk" },
-  { image: heroLounge, alt: "Lounge bar with city views" },
-  { image: heroSuite, alt: "Luxury suite bedroom" },
+const defaultSlides = [
+  { image: heroLobby.src, alt: "Grand hotel lobby" },
+  { image: heroExterior.src, alt: "Hotel exterior at dusk" },
+  { image: heroLounge.src, alt: "Lounge bar with city views" },
+  { image: heroSuite.src, alt: "Luxury suite bedroom" },
 ];
 
 export function HeroSection() {
+  const [slides, setSlides] = useState(defaultSlides);
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        const res = await fetch("/api/images");
+        if (res.ok) {
+          const data = await res.json();
+          const heroImages = data.filter((img: any) => img.section === "Hero");
+          if (heroImages.length > 0) {
+            setSlides(heroImages.map((img: any) => ({
+              image: img.url,
+              alt: img.alt || "Hero Image"
+            })));
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchImages();
+  }, []);
 
   const next = useCallback(
     () => setCurrent((c) => (c + 1) % slides.length),
-    []
+    [slides.length]
   );
   const prev = useCallback(
     () => setCurrent((c) => (c - 1 + slides.length) % slides.length),
-    []
+    [slides.length]
   );
 
   useEffect(() => {
@@ -39,10 +61,10 @@ export function HeroSection() {
       {/* Slides */}
       {slides.map((slide, i) => (
         <div
-          key={slide.alt}
+          key={i}
           className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
           style={{
-            backgroundImage: `url(${slide.image.src})`,
+            backgroundImage: `url(${slide.image})`,
             opacity: i === current ? 1 : 0,
           }}
           aria-hidden={i !== current}

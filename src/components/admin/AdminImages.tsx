@@ -62,7 +62,7 @@ export function AdminImages() {
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this image?")) return;
-        
+
         try {
             const res = await fetch(`/api/images?id=${id}`, { method: 'DELETE' });
             if (res.ok) {
@@ -206,20 +206,20 @@ export function AdminImages() {
 
             {/* Upload Modal */}
             <Dialog open={showUpload} onOpenChange={setShowUpload}>
-                <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900 border-border rounded-none">
+                <DialogContent className="sm:max-w-md bg-black text-white border-zinc-700 rounded-none">
                     <DialogHeader>
                         <DialogTitle className="font-display tracking-wider">Upload New Image</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div>
-                            <label htmlFor="image-file" className="block font-body text-sm text-muted-foreground mb-1.5">Image File</label>
+                            <label htmlFor="image-file" className="block font-body text-sm text-white/70 mb-1.5">Image File</label>
                             <input
                                 id="image-file"
                                 ref={fileInputRef}
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
-                                className="w-full font-body text-sm text-foreground file:mr-4 file:py-2 file:px-4 file:border file:border-border file:bg-muted file:text-foreground file:font-body file:text-xs file:cursor-pointer"
+                                className="w-full font-body text-sm text-white file:mr-4 file:py-2 file:px-4 file:border file:border-border file:bg-white/10 file:text-white file:font-body file:text-xs file:cursor-pointer"
                                 title="Upload image file"
                             />
                             {uploadPreviewUrl && (
@@ -229,24 +229,24 @@ export function AdminImages() {
                             )}
                         </div>
                         <div>
-                            <label htmlFor="image-label" className="block font-body text-sm text-muted-foreground mb-1.5">Label / Alt Text</label>
+                            <label htmlFor="image-label" className="block font-body text-sm text-white/70 mb-1.5">Label / Alt Text</label>
                             <input
                                 id="image-label"
                                 type="text"
                                 placeholder="e.g. Hotel Pool View"
                                 value={uploadLabel}
                                 onChange={(e) => setUploadLabel(e.target.value)}
-                                className="w-full bg-muted border border-border text-foreground placeholder:text-muted-foreground px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                className="w-full bg-white/10 border border-border text-white placeholder:text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
                                 title="Image Label"
                             />
                         </div>
                         <div>
-                            <label htmlFor="image-section" className="block font-body text-sm text-muted-foreground mb-1.5">Section</label>
+                            <label htmlFor="image-section" className="block font-body text-sm text-white/70 mb-1.5">Section</label>
                             <select
                                 id="image-section"
                                 value={uploadSection}
                                 onChange={(e) => setUploadSection(e.target.value)}
-                                className="w-full bg-muted border border-border text-foreground px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
                                 title="Section"
                             >
                                 <option>Hero</option>
@@ -256,12 +256,12 @@ export function AdminImages() {
                         </div>
                     </div>
                     <DialogFooter className="sm:justify-end gap-2">
-                        <Button type="button" variant="outline" onClick={closeUploadModal} disabled={isUploading} className="rounded-none border-border">
+                        <Button type="button" variant="outline" onClick={closeUploadModal} disabled={isUploading} className="rounded-none border-border text-white bg-transparent hover:bg-white/10 hover:text-white">
                             Cancel
                         </Button>
-                        <Button 
-                            type="button" 
-                            onClick={handleUpload} 
+                        <Button
+                            type="button"
+                            onClick={handleUpload}
                             disabled={isUploading}
                             className="rounded-none bg-hotel-gold text-hotel-black hover:bg-hotel-gold-light font-bold tracking-widest text-xs"
                         >
