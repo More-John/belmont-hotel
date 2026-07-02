@@ -34,6 +34,7 @@ model Inquiry {
 model Image {
   id        String   @id @default(cuid())
   url       String
+  publicId  String?
   alt       String?
   section   String
   order     Int      @default(0)

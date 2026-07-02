@@ -79,33 +79,39 @@ export function ReservationSection() {
                             <option value="one-bedroom" className="text-hotel-black">One-Bedroom</option>
                         </select>
 
-                        <input
-                            name="checkIn"
-                            type="text"
-                            placeholder="Check-in date"
-                            value={form.checkIn}
-                            onChange={handleChange}
-                            onFocus={(e) => (e.target.type = "date")}
-                            onBlur={(e) => {
-                                if (!e.target.value) e.target.type = "text";
-                            }}
-                            required
-                            className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white"
-                        />
+                        <div className="relative w-full">
+                            <input
+                                name="checkIn"
+                                type="date"
+                                aria-label="Check-in date"
+                                value={form.checkIn}
+                                onChange={handleChange}
+                                required
+                                className={`w-full bg-transparent border border-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white ${form.checkIn ? 'text-hotel-white/60' : 'text-transparent'} [color-scheme:dark]`}
+                            />
+                            {!form.checkIn && (
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-hotel-white/60 pointer-events-none font-body">
+                                    Check-in date
+                                </span>
+                            )}
+                        </div>
 
-                        <input
-                            name="checkOut"
-                            type="text"
-                            placeholder="Check-out date"
-                            value={form.checkOut}
-                            onChange={handleChange}
-                            onFocus={(e) => (e.target.type = "date")}
-                            onBlur={(e) => {
-                                if (!e.target.value) e.target.type = "text";
-                            }}
-                            required
-                            className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white"
-                        />
+                        <div className="relative w-full">
+                            <input
+                                name="checkOut"
+                                type="date"
+                                aria-label="Check-out date"
+                                value={form.checkOut}
+                                onChange={handleChange}
+                                required
+                                className={`w-full bg-transparent border border-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white ${form.checkOut ? 'text-hotel-white/60' : 'text-transparent'} [color-scheme:dark]`}
+                            />
+                            {!form.checkOut && (
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-hotel-white/60 pointer-events-none font-body">
+                                    Check-out date
+                                </span>
+                            )}
+                        </div>
 
                         <select name="persons" aria-label="Persons" value={form.persons} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white">
