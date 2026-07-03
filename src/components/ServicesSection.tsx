@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { UtensilsCrossed, Wine, PartyPopper, Presentation } from "lucide-react";
-import restaurantImg from "@/assets/service-restaurant.jpg";
-import minibarImg from "@/assets/service-minibar.jpg";
-import eventImg from "@/assets/service-event.jpg";
-import conferenceImg from "@/assets/service-conference.jpg";
+
 
 const defaultServices = [
-    { icon: UtensilsCrossed, label: "RESTAURANT", image: restaurantImg.src },
-    { icon: Wine, label: "MINI BAR", image: minibarImg.src },
-    { icon: PartyPopper, label: "EVENT CENTER", image: eventImg.src },
-    { icon: Presentation, label: "CONFERENCE HALL", image: conferenceImg.src },
+    { icon: UtensilsCrossed, label: "RESTAURANT", image: "" },
+    { icon: Wine, label: "MINI BAR", image: "" },
+    { icon: PartyPopper, label: "EVENT CENTER", image: "" },
+    { icon: Presentation, label: "CONFERENCE HALL", image: "" },
 ];
 
 export function ServicesSection() {
@@ -26,10 +23,14 @@ export function ServicesSection() {
                     const serviceImages = data.filter((img: any) => img.section === "Services");
                     if (serviceImages.length > 0) {
                         setServices((prev) => prev.map(service => {
-                            const uploaded = serviceImages.find((img: any) =>
-                                img.alt?.toLowerCase().includes(service.label.toLowerCase()) ||
-                                service.label.toLowerCase().includes(img.alt?.toLowerCase() || '')
-                            );
+                            let targetLabel = "";
+                            if (service.label === "RESTAURANT") targetLabel = "service-restaurant";
+                            else if (service.label === "MINI BAR") targetLabel = "service-minibar";
+                            else if (service.label === "EVENT CENTER") targetLabel = "service-event";
+                            else if (service.label === "CONFERENCE HALL") targetLabel = "service-conference";
+
+                            const uploaded = serviceImages.find((img: any) => img.alt?.toLowerCase() === targetLabel);
+                            
                             if (uploaded) {
                                 return { ...service, image: uploaded.url };
                             }
@@ -64,7 +65,7 @@ export function ServicesSection() {
             <div className="grid grid-cols-1 md:grid-cols-4">
                 {services.map((s) => (
                     <div key={s.label} className="relative h-64 md:h-80 group overflow-hidden">
-                        <img src={s.image} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        {s.image && <img src={s.image} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
                         <div className="absolute inset-0 bg-hotel-black/50 flex flex-col items-center justify-center gap-3">
                             <s.icon className="w-10 h-10 text-hotel-gold" strokeWidth={1.5} />
                             <span className="font-body text-sm tracking-[0.3em] text-hotel-white font-bold">

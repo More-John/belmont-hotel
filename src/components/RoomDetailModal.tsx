@@ -38,14 +38,20 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30">
-                    <Image
-                        src={room.image}
-                        alt={room.label}
-                        fill
-                        className="object-cover"
-                    />
-                </div>
+                {room.image ? (
+                    <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30">
+                        <Image
+                            src={room.image}
+                            alt={room.label}
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+                ) : (
+                    <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30 bg-hotel-black/50 flex items-center justify-center">
+                        <span className="text-hotel-white/50 font-body text-sm">Image coming soon</span>
+                    </div>
+                )}
 
                 <div className="mt-4 space-y-4">
                     <p className="font-body text-hotel-white/80 whitespace-pre-line leading-relaxed text-base">

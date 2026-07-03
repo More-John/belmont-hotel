@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import roomLuxury from "@/assets/room-luxury.jpg";
-import roomJunior from "@/assets/room-junior.jpg";
-import roomEconomy from "@/assets/room-economy.jpg";
+
 import { RoomDetailModal, type Room } from "@/components/RoomDetailModal";
 
 // Extended room data including modal-specific fields
@@ -13,7 +11,7 @@ const defaultRooms: Room[] = [
     id: "executive",
     label: "EXECUTIVE",
     desc: "1 extra-large double bed.\nThe suite features 1 bedroom and 1 bathroom with a bath and free toiletries. The air-conditioned suite provides a flat-screen TV with cable channels, a wardrobe, an electric kettle and a sofa.",
-    image: roomLuxury,
+    image: "",
     bedType: "Extra-large double bed",
     size: "49m²",
     amenities: [
@@ -31,7 +29,7 @@ const defaultRooms: Room[] = [
     id: "deluxe-double",
     label: "DELUXE DOUBLE",
     desc: "1 large double bed. The spacious double room features air conditioning, a wardrobe, as well as a private bathroom boasting a bath. This double room offers an electric kettle and a flat-screen TV with cable channels",
-    image: roomJunior,
+    image: "",
     bedType: "Large double bed",
     size: "32m²",
     amenities: [
@@ -48,7 +46,7 @@ const defaultRooms: Room[] = [
     id: "one-bedroom",
     label: "ONE-BEDROOM",
     desc: "Simpler than the standard room but with all the necessary amenities. Every room is simply furnished and decorated and equipped with Air Conditioning, a TV and a private bathroom.",
-    image: roomEconomy,
+    image: "",
     bedType: "Double bed",
     size: "24m²",
     amenities: ["Free Wi-Fi", "TV", "Air conditioning", "Private bathroom", "Wake-up service"],
@@ -70,12 +68,15 @@ export function RoomsSection() {
           const roomImages = data.filter((img: any) => img.section === "Rooms");
           if (roomImages.length > 0) {
             setRooms((prev) => prev.map(room => {
-              const uploaded = roomImages.find((img: any) => 
-                  img.alt?.toLowerCase().includes(room.label.toLowerCase()) || 
-                  room.label.toLowerCase().includes(img.alt?.toLowerCase() || '')
-              );
+              let targetLabel = "";
+              if (room.id === "executive") targetLabel = "room-executive";
+              else if (room.id === "deluxe-double") targetLabel = "room-deluxe-double";
+              else if (room.id === "one-bedroom") targetLabel = "room-one-bedroom";
+
+              const uploaded = roomImages.find((img: any) => img.alt?.toLowerCase() === targetLabel);
+              
               if (uploaded) {
-                return { ...room, image: { src: uploaded.url, height: 0, width: 0 } as any };
+                return { ...room, image: uploaded.url };
               }
               return room;
             }));
@@ -110,8 +111,8 @@ export function RoomsSection() {
     >
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700"
-        style={{ backgroundImage: `url(${currentRoom.image.src})` }}
+        className="absolute inset-0 bg-cover bg-center transition-all duration-700 bg-hotel-black"
+        style={{ backgroundImage: currentRoom?.image ? `url(${currentRoom.image})` : undefined }}
       />
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-hotel-black/60" />

@@ -2,17 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Star, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
-import heroLobby from "@/assets/hero-lobby.jpg";
-import heroExterior from "@/assets/hero-exterior.jpg";
-import heroSuite from "@/assets/hero-suite.jpg";
-import heroLounge from "@/assets/hero-lounge.jpg";
-
-const defaultSlides = [
-  { image: heroLobby.src, alt: "Grand hotel lobby" },
-  { image: heroExterior.src, alt: "Hotel exterior at dusk" },
-  { image: heroLounge.src, alt: "Lounge bar with city views" },
-  { image: heroSuite.src, alt: "Luxury suite bedroom" },
-];
+const defaultSlides: { image: string, alt: string }[] = [];
 
 export function HeroSection() {
   const [slides, setSlides] = useState(defaultSlides);
@@ -56,7 +46,7 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-hotel-black"
     >
       {/* Slides */}
       {slides.map((slide, i) => (

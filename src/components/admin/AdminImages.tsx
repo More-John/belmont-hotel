@@ -5,6 +5,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogFooter,
 } from "@/components/ui/dialog";
 
@@ -43,6 +44,22 @@ export function AdminImages() {
     useEffect(() => {
         fetchImages();
     }, []);
+
+    // Auto-update label based on section
+    useEffect(() => {
+        if (!showUpload) return;
+        
+        if (uploadSection === "Hero") {
+            const heroImages = images.filter((i) => i.section === "Hero");
+            const nextNum = Math.min(heroImages.length + 1, 10);
+            const formattedNum = nextNum.toString().padStart(2, '0');
+            setUploadLabel(`hero-section-${formattedNum}`);
+        } else if (uploadSection === "Rooms") {
+            if (!uploadLabel.startsWith("room-")) setUploadLabel("room-one-bedroom");
+        } else if (uploadSection === "Services") {
+            if (!uploadLabel.startsWith("service-")) setUploadLabel("service-conference");
+        }
+    }, [uploadSection, images, showUpload, uploadLabel]);
 
     const fetchImages = async () => {
         try {
@@ -209,6 +226,9 @@ export function AdminImages() {
                 <DialogContent className="sm:max-w-md bg-black text-white border-zinc-700 rounded-none">
                     <DialogHeader>
                         <DialogTitle className="font-display tracking-wider">Upload New Image</DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Form to upload a new image for a specific section.
+                        </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div>
@@ -230,15 +250,49 @@ export function AdminImages() {
                         </div>
                         <div>
                             <label htmlFor="image-label" className="block font-body text-sm text-white/70 mb-1.5">Label / Alt Text</label>
-                            <input
-                                id="image-label"
-                                type="text"
-                                placeholder="e.g. Hotel Pool View"
-                                value={uploadLabel}
-                                onChange={(e) => setUploadLabel(e.target.value)}
-                                className="w-full bg-white/10 border border-border text-white placeholder:text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
-                                title="Image Label"
-                            />
+                            {uploadSection === "Hero" ? (
+                                <input
+                                    id="image-label"
+                                    type="text"
+                                    readOnly
+                                    value={uploadLabel}
+                                    className="w-full bg-white/10 border border-border text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold cursor-not-allowed"
+                                    title="Auto-generated Hero Label"
+                                />
+                            ) : uploadSection === "Rooms" ? (
+                                <select
+                                    id="image-label"
+                                    value={uploadLabel}
+                                    onChange={(e) => setUploadLabel(e.target.value)}
+                                    className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                >
+                                    <option value="room-one-bedroom">room-one-bedroom</option>
+                                    <option value="room-deluxe-double">room-deluxe-double</option>
+                                    <option value="room-executive">room-executive</option>
+                                </select>
+                            ) : uploadSection === "Services" ? (
+                                <select
+                                    id="image-label"
+                                    value={uploadLabel}
+                                    onChange={(e) => setUploadLabel(e.target.value)}
+                                    className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                >
+                                    <option value="service-conference">service-conference</option>
+                                    <option value="service-event">service-event</option>
+                                    <option value="service-minibar">service-minibar</option>
+                                    <option value="service-restaurant">service-restaurant</option>
+                                </select>
+                            ) : (
+                                <input
+                                    id="image-label"
+                                    type="text"
+                                    placeholder="e.g. Hotel Pool View"
+                                    value={uploadLabel}
+                                    onChange={(e) => setUploadLabel(e.target.value)}
+                                    className="w-full bg-white/10 border border-border text-white placeholder:text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                    title="Image Label"
+                                />
+                            )}
                         </div>
                         <div>
                             <label htmlFor="image-section" className="block font-body text-sm text-white/70 mb-1.5">Section</label>
