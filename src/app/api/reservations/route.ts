@@ -40,3 +40,39 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Failed to create reservation' }, { status: 500 });
     }
 }
+
+// PATCH: update reservation status
+export async function PATCH(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+        if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
+
+        const body = await request.json();
+        const updated = await prisma.reservation.update({
+            where: { id },
+            data: { status: body.status },
+        });
+
+        return NextResponse.json(updated);
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: 'Failed to update reservation' }, { status: 500 });
+    }
+}
+
+// DELETE: remove a reservation
+export async function DELETE(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+        if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
+
+        await prisma.reservation.delete({ where: { id } });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: 'Failed to delete reservation' }, { status: 500 });
+    }
+}
