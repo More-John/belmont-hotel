@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import path from 'path';
 
 // Configure your email transport (use environment variables)
 const transporter = nodemailer.createTransport({
@@ -49,5 +50,42 @@ export async function sendInquiryEmail(inquiry: any) {
         to: adminEmail,
         subject,
         html,
+    });
+}
+
+export async function sendGuestConfirmationEmail(reservation: any) {
+    const subject = `Your Reservation Request at Belmont Hotel`;
+    const html = `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="cid:belmontlogo" alt="Belmont Hotel" style="max-width: 200px; height: auto;" />
+        </div>
+        <h2 style="color: #c5a880; text-align: center;">Reservation Request Received</h2>
+        <p>Dear ${reservation.guestName},</p>
+        <p>Thank you for choosing Belmont Hotels! Your reservation request was successful.</p>
+        <p>We are currently reviewing your request for the <strong>${reservation.roomType}</strong> room from <strong>${new Date(reservation.checkIn).toLocaleDateString()}</strong> to <strong>${new Date(reservation.checkOut).toLocaleDateString()}</strong>.</p>
+        <p>Please be assured that a response will be issued to you shortly with your final confirmation.</p>
+        <p>We look forward to hosting you.</p>
+        <p style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; font-size: 12px; color: #999;">
+            Belmont Hotel<br/>
+            This is an automated message, please do not reply directly to this email.
+        </p>
+    </div>
+    `;
+
+    const logoPath = path.join(process.cwd(), 'src', 'assets', 'belmont-logo.png');
+
+    await transporter.sendMail({
+        from: `"Belmont Hotel" <${process.env.SMTP_FROM}>`,
+        to: reservation.guestEmail,
+        subject,
+        html,
+        attachments: [
+            {
+                filename: 'belmont-logo.png',
+                path: logoPath,
+                cid: 'belmontlogo'
+            }
+        ]
     });
 }

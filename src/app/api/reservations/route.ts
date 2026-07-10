@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { sendReservationEmail } from '@/lib/email';
+import { sendReservationEmail, sendGuestConfirmationEmail } from '@/lib/email';
 
 // GET: fetch all reservations (for admin dashboard)
 export async function GET() {
@@ -33,6 +33,9 @@ export async function POST(request: Request) {
 
         // Send email notification to admin
         await sendReservationEmail(reservation);
+
+        // Send confirmation email to guest
+        await sendGuestConfirmationEmail(reservation);
 
         return NextResponse.json(reservation, { status: 201 });
     } catch (error) {
