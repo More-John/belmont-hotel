@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -8,7 +9,8 @@ export type Room = {
     id: string;
     label: string;
     desc: string;
-    image: any;
+    images: string[];
+    price: number;
     amenities?: string[];
     bedType?: string;
     size?: string;
@@ -22,7 +24,55 @@ interface RoomDetailModalProps {
 }
 
 export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDetailModalProps) {
+    const [currentImgIdx, setCurrentImgIdx] = useState(0);
+    const [checkIn, setCheckIn] = useState("");
+    const [checkOut, setCheckOut] = useState("");
+
+    // Reset state when modal opens/closes
+    useEffect(() => {
+        if (open) {
+            setCurrentImgIdx(0);
+            setCheckIn("");
+            setCheckOut("");
+        }
+    }, [open]);
+
     if (!room) return null;
+
+    // Calculate total nights
+    let totalNights = 0;
+    if (checkIn && checkOut) {
+        const start = new Date(checkIn);
+        const end = new Date(checkOut);
+        const diffTime = end.getTime() - start.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 0) {
+            totalNights = diffDays;
+        }
+    }
+
+    const totalCost = totalNights > 0 ? totalNights * room.price : 0;
+
+    const handleBookClick = () => {
+        // Pass the prefilled data via custom event
+        if (checkIn || checkOut) {
+            window.dispatchEvent(new CustomEvent("prefill-reservation", {
+                detail: {
+                    roomType: room.id,
+                    checkIn,
+                    checkOut
+                }
+            }));
+        } else {
+            // Still prefill the room type
+            window.dispatchEvent(new CustomEvent("prefill-reservation", {
+                detail: { roomType: room.id }
+            }));
+        }
+        
+        onBookNow(room);
+        onOpenChange(false);
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -38,26 +88,50 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                     </DialogDescription>
                 </DialogHeader>
 
-                {room.image ? (
-                    <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30">
-                        <Image
-                            src={room.image}
-                            alt={room.label}
-                            fill
-                            className="object-cover"
-                        />
-                    </div>
-                ) : (
-                    <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30 bg-hotel-black/50 flex items-center justify-center">
-                        <span className="text-hotel-white/50 font-body text-sm">Image coming soon</span>
-                    </div>
-                )}
+                <div className="space-y-4">
+                    {/* Main Image */}
+                    {room.images && room.images.length > 0 ? (
+                        <div className="space-y-2">
+                            <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30">
+                                <Image
+                                    src={room.images[currentImgIdx]}
+                                    alt={room.label}
+                                    fill
+                                    className="object-cover transition-opacity duration-300"
+                                />
+                            </div>
+                            {/* Thumbnails */}
+                            {room.images.length > 1 && (
+                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                    {room.images.map((img, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setCurrentImgIdx(idx)}
+                                            className={`relative h-16 w-24 flex-shrink-0 rounded overflow-hidden border-2 transition-all ${currentImgIdx === idx ? 'border-hotel-gold' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                                        >
+                                            <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30 bg-hotel-black/50 flex items-center justify-center">
+                            <span className="text-hotel-white/50 font-body text-sm">Image coming soon</span>
+                        </div>
+                    )}
 
-                <div className="mt-4 space-y-4">
-                    <p className="font-body text-hotel-white/80 whitespace-pre-line leading-relaxed text-base">
-                        {room.desc}
-                    </p>
+                    {/* Price and Description */}
+                    <div>
+                        <div className="font-display text-2xl text-hotel-gold mb-4">
+                            ₦{room.price.toLocaleString()} <span className="text-sm text-hotel-white/60 font-body">/ night</span>
+                        </div>
+                        <p className="font-body text-hotel-white/80 whitespace-pre-line leading-relaxed text-base">
+                            {room.desc}
+                        </p>
+                    </div>
 
+                    {/* Amenities */}
                     {room.amenities && room.amenities.length > 0 && (
                         <div>
                             <h4 className="font-display text-sm uppercase tracking-wider text-hotel-gold mb-3">
@@ -73,14 +147,55 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                             </ul>
                         </div>
                     )}
+
+                    {/* Date Picker & Calculation */}
+                    <div className="border-t border-hotel-gold/20 pt-6 mt-6">
+                        <h4 className="font-display text-sm uppercase tracking-wider text-hotel-gold mb-4">
+                            Check Availability
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="relative w-full">
+                                <label className="block text-hotel-white/60 text-xs font-body mb-1">Check-in</label>
+                                <input
+                                    type="date"
+                                    value={checkIn}
+                                    onChange={(e) => setCheckIn(e.target.value)}
+                                    className="w-full bg-transparent border border-hotel-white/30 px-3 py-2 font-body text-hotel-white focus:outline-none focus:border-hotel-gold [color-scheme:dark]"
+                                />
+                            </div>
+                            <div className="relative w-full">
+                                <label className="block text-hotel-white/60 text-xs font-body mb-1">Check-out</label>
+                                <input
+                                    type="date"
+                                    value={checkOut}
+                                    onChange={(e) => setCheckOut(e.target.value)}
+                                    min={checkIn}
+                                    className="w-full bg-transparent border border-hotel-white/30 px-3 py-2 font-body text-hotel-white focus:outline-none focus:border-hotel-gold [color-scheme:dark]"
+                                />
+                            </div>
+                        </div>
+
+                        {totalNights > 0 && (
+                            <div className="mt-4 p-4 bg-hotel-gold/10 border border-hotel-gold/20 rounded">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="font-body text-hotel-white/80 text-sm">Total Nights:</span>
+                                    <span className="font-body text-hotel-white text-sm font-bold">{totalNights}</span>
+                                </div>
+                                <div className="flex justify-between items-center mb-3">
+                                    <span className="font-body text-hotel-white/80 text-sm">Total Cost:</span>
+                                    <span className="font-display text-hotel-gold text-lg">₦{totalCost.toLocaleString()}</span>
+                                </div>
+                                <div className="text-center font-body text-xs text-hotel-white/90 bg-hotel-gold/20 py-2 rounded">
+                                    Room type and nights are available confirmed.
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <Button
-                    onClick={() => {
-                        onBookNow(room);
-                        onOpenChange(false);
-                    }}
-                    className="mt-6 w-full bg-hotel-gold text-hotel-black font-body tracking-wide hover:bg-hotel-gold/90 transition-colors"
+                    onClick={handleBookClick}
+                    className="mt-6 w-full bg-hotel-gold text-hotel-black font-body tracking-wide hover:bg-hotel-gold-light transition-colors"
                 >
                     BOOK THIS ROOM
                 </Button>

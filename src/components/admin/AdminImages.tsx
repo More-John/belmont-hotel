@@ -36,6 +36,7 @@ export function AdminImages() {
     const [uploadFile, setUploadFile] = useState<File | null>(null);
     const [uploadLabel, setUploadLabel] = useState("");
     const [uploadSection, setUploadSection] = useState("Hero");
+    const [uploadRoomType, setUploadRoomType] = useState("business-suite");
     const [uploadPreviewUrl, setUploadPreviewUrl] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -55,11 +56,15 @@ export function AdminImages() {
             const formattedNum = nextNum.toString().padStart(2, '0');
             setUploadLabel(`hero-section-${formattedNum}`);
         } else if (uploadSection === "Rooms") {
-            if (!uploadLabel.startsWith("room-")) setUploadLabel("room-one-bedroom");
+            const prefix = `room-${uploadRoomType}`;
+            const roomImages = images.filter((i) => i.alt?.startsWith(prefix));
+            const nextNum = Math.min(roomImages.length + 1, 5);
+            const formattedNum = nextNum.toString().padStart(2, '0');
+            setUploadLabel(`${prefix}-${formattedNum}`);
         } else if (uploadSection === "Services") {
             if (!uploadLabel.startsWith("service-")) setUploadLabel("service-conference");
         }
-    }, [uploadSection, images, showUpload, uploadLabel]);
+    }, [uploadSection, images, showUpload, uploadLabel, uploadRoomType]);
 
     const fetchImages = async () => {
         try {
@@ -145,6 +150,7 @@ export function AdminImages() {
         setUploadFile(null);
         setUploadLabel("");
         setUploadSection("Hero");
+        setUploadRoomType("business-suite");
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
@@ -260,16 +266,26 @@ export function AdminImages() {
                                     title="Auto-generated Hero Label"
                                 />
                             ) : uploadSection === "Rooms" ? (
-                                <select
-                                    id="image-label"
-                                    value={uploadLabel}
-                                    onChange={(e) => setUploadLabel(e.target.value)}
-                                    className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
-                                >
-                                    <option value="room-one-bedroom">room-one-bedroom</option>
-                                    <option value="room-deluxe-double">room-deluxe-double</option>
-                                    <option value="room-executive">room-executive</option>
-                                </select>
+                                <div className="space-y-2">
+                                    <select
+                                        value={uploadRoomType}
+                                        onChange={(e) => setUploadRoomType(e.target.value)}
+                                        className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                    >
+                                        <option value="business-suite">Business Suite</option>
+                                        <option value="executive-suite">Executive Suite</option>
+                                        <option value="executive-deluxe">Executive Deluxe</option>
+                                        <option value="deluxe">Deluxe Room</option>
+                                    </select>
+                                    <input
+                                        id="image-label"
+                                        type="text"
+                                        readOnly
+                                        value={uploadLabel}
+                                        className="w-full bg-white/10 border border-border text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold cursor-not-allowed"
+                                        title="Auto-generated Room Label"
+                                    />
+                                </div>
                             ) : uploadSection === "Services" ? (
                                 <select
                                     id="image-label"

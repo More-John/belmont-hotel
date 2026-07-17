@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export function ReservationSection() {
@@ -8,6 +8,23 @@ export function ReservationSection() {
         name: "", email: "", phone: "", roomType: "", checkIn: "", checkOut: "", persons: "",
     });
     const [loading, setLoading] = useState(false); // ✅ added loading state
+
+    useEffect(() => {
+        const handlePrefill = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            if (customEvent.detail) {
+                setForm(prev => ({
+                    ...prev,
+                    roomType: customEvent.detail.roomType || prev.roomType,
+                    checkIn: customEvent.detail.checkIn || prev.checkIn,
+                    checkOut: customEvent.detail.checkOut || prev.checkOut,
+                }));
+            }
+        };
+
+        window.addEventListener("prefill-reservation", handlePrefill);
+        return () => window.removeEventListener("prefill-reservation", handlePrefill);
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -35,7 +52,7 @@ export function ReservationSection() {
                 body: JSON.stringify(data),
             });
             if (res.ok) {
-                toast.success("Reservation request sent! We'll contact you soon.");
+                toast.success("Reservation request sent! Room type and nights are available confirmed. An email was sent to your inbox.");
                 // Reset form
                 setForm({
                     name: "", email: "", phone: "", roomType: "", checkIn: "", checkOut: "", persons: "",
@@ -74,9 +91,10 @@ export function ReservationSection() {
                         <select name="roomType" aria-label="Room type" value={form.roomType} onChange={handleChange} required
                             className="bg-transparent border border-hotel-white/60 text-hotel-white/60 px-4 py-3 font-body focus:outline-none focus:border-hotel-white">
                             <option value="" className="text-hotel-black">Room type</option>
-                            <option value="executive" className="text-hotel-black">Executive</option>
-                            <option value="deluxe-double" className="text-hotel-black">Deluxe Double</option>
-                            <option value="one-bedroom" className="text-hotel-black">One-Bedroom</option>
+                            <option value="business-suite" className="text-hotel-black">Business Suite</option>
+                            <option value="executive-suite" className="text-hotel-black">Executive Suite</option>
+                            <option value="executive-deluxe" className="text-hotel-black">Executive Deluxe</option>
+                            <option value="deluxe" className="text-hotel-black">Deluxe</option>
                         </select>
 
                         <div className="relative w-full">
@@ -118,8 +136,6 @@ export function ReservationSection() {
                             <option value="" className="text-hotel-black">Persons</option>
                             <option value="1" className="text-hotel-black">1</option>
                             <option value="2" className="text-hotel-black">2</option>
-                            <option value="3" className="text-hotel-black">3</option>
-                            <option value="4" className="text-hotel-black">4+</option>
                         </select>
                     </div>
 

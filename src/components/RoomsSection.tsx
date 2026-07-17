@@ -8,10 +8,11 @@ import { RoomDetailModal, type Room } from "@/components/RoomDetailModal";
 // Extended room data including modal-specific fields
 const defaultRooms: Room[] = [
   {
-    id: "executive",
-    label: "EXECUTIVE",
+    id: "business-suite",
+    label: "BUSINESS SUITE",
     desc: "1 extra-large double bed.\nThe suite features 1 bedroom and 1 bathroom with a bath and free toiletries. The air-conditioned suite provides a flat-screen TV with cable channels, a wardrobe, an electric kettle and a sofa.",
-    image: "",
+    images: [],
+    price: 107500,
     bedType: "Extra-large double bed",
     size: "49m²",
     amenities: [
@@ -26,12 +27,31 @@ const defaultRooms: Room[] = [
     ],
   },
   {
-    id: "deluxe-double",
-    label: "DELUXE DOUBLE",
-    desc: "1 large double bed. The spacious double room features air conditioning, a wardrobe, as well as a private bathroom boasting a bath. This double room offers an electric kettle and a flat-screen TV with cable channels",
-    image: "",
+    id: "executive-suite",
+    label: "EXECUTIVE SUITE",
+    desc: "1 Large Double Bed. Relax in this spacious, air-conditioned double room complete with a large double bed, wardrobe, and a private bathroom with a bathtub. Additional amenities include an electric kettle and a flat-screen TV offering a variety of cable channels.",
+    images: [],
+    price: 96750,
     bedType: "Large double bed",
-    size: "32m²",
+    size: "38m²",
+    amenities: [
+      "Free Wi-Fi",
+      "Flat-screen TV",
+      "Air conditioning",
+      "Private bathroom",
+      "Electric kettle",
+      "Work desk ",
+      "Wake-up service",
+    ],
+  },
+  {
+    id: "executive-deluxe",
+    label: "EXECUTIVE DELUXE",
+    desc: "1 large double bed. The spacious double room features air conditioning, a wardrobe, as well as a private bathroom boasting a bath. This double room offers a flat-screen TV with cable channels.",
+    images: [],
+    price: 80625,
+    bedType: "Large double bed",
+    size: "34m²",
     amenities: [
       "Free Wi-Fi",
       "Flat-screen TV",
@@ -43,10 +63,11 @@ const defaultRooms: Room[] = [
     ],
   },
   {
-    id: "one-bedroom",
-    label: "ONE-BEDROOM",
+    id: "deluxe",
+    label: "DELUXE ROOM",
     desc: "Simpler than the standard room but with all the necessary amenities. Every room is simply furnished and decorated and equipped with Air Conditioning, a TV and a private bathroom.",
-    image: "",
+    images: [],
+    price: 69875,
     bedType: "Double bed",
     size: "24m²",
     amenities: ["Free Wi-Fi", "TV", "Air conditioning", "Private bathroom", "Wake-up service"],
@@ -58,7 +79,7 @@ export function RoomsSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
-  
+
   useEffect(() => {
     async function fetchImages() {
       try {
@@ -68,15 +89,12 @@ export function RoomsSection() {
           const roomImages = data.filter((img: any) => img.section === "Rooms");
           if (roomImages.length > 0) {
             setRooms((prev) => prev.map(room => {
-              let targetLabel = "";
-              if (room.id === "executive") targetLabel = "room-executive";
-              else if (room.id === "deluxe-double") targetLabel = "room-deluxe-double";
-              else if (room.id === "one-bedroom") targetLabel = "room-one-bedroom";
+              const targetPrefix = `room-${room.id}`;
+              const uploaded = roomImages.filter((img: any) => img.alt?.toLowerCase().startsWith(targetPrefix));
 
-              const uploaded = roomImages.find((img: any) => img.alt?.toLowerCase() === targetLabel);
-              
-              if (uploaded) {
-                return { ...room, image: uploaded.url };
+              if (uploaded.length > 0) {
+                const sortedImages = uploaded.sort((a: any, b: any) => a.alt.localeCompare(b.alt));
+                return { ...room, images: sortedImages.map((img: any) => img.url) };
               }
               return room;
             }));
@@ -112,7 +130,7 @@ export function RoomsSection() {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-700 bg-hotel-black"
-        style={{ backgroundImage: currentRoom?.image ? `url(${currentRoom.image})` : undefined }}
+        style={{ backgroundImage: currentRoom?.images?.[0] ? `url(${currentRoom.images[0]})` : undefined }}
       />
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-hotel-black/60" />
