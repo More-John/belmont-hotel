@@ -297,6 +297,7 @@ export function AdminImages() {
                                     <option value="service-event">service-event</option>
                                     <option value="service-minibar">service-minibar</option>
                                     <option value="service-restaurant">service-restaurant</option>
+                                    <option value="service-catering">service-catering</option>
                                 </select>
                             ) : (
                                 <input
