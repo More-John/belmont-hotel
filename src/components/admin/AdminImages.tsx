@@ -245,7 +245,7 @@ export function AdminImages() {
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
-                                className="w-full font-body text-sm text-white file:mr-4 file:py-2 file:px-4 file:border file:border-border file:bg-white/10 file:text-white file:font-body file:text-xs file:cursor-pointer"
+                                className="w-full font-body text-base sm:text-sm text-white file:mr-4 file:py-2 file:px-4 file:border file:border-border file:bg-white/10 file:text-white file:font-body file:text-xs file:cursor-pointer"
                                 title="Upload image file"
                             />
                             {uploadPreviewUrl && (
@@ -262,7 +262,7 @@ export function AdminImages() {
                                     type="text"
                                     readOnly
                                     value={uploadLabel}
-                                    className="w-full bg-white/10 border border-border text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold cursor-not-allowed"
+                                    className="w-full bg-white/10 border border-border text-white/50 px-4 py-2.5 font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold cursor-not-allowed"
                                     title="Auto-generated Hero Label"
                                 />
                             ) : uploadSection === "Rooms" ? (
@@ -270,7 +270,7 @@ export function AdminImages() {
                                     <select
                                         value={uploadRoomType}
                                         onChange={(e) => setUploadRoomType(e.target.value)}
-                                        className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                        className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold"
                                     >
                                         <option value="business-suite">Business Suite</option>
                                         <option value="executive-suite">Executive Suite</option>
@@ -282,7 +282,7 @@ export function AdminImages() {
                                         type="text"
                                         readOnly
                                         value={uploadLabel}
-                                        className="w-full bg-white/10 border border-border text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold cursor-not-allowed"
+                                        className="w-full bg-white/10 border border-border text-white/50 px-4 py-2.5 font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold cursor-not-allowed"
                                         title="Auto-generated Room Label"
                                     />
                                 </div>
@@ -291,7 +291,7 @@ export function AdminImages() {
                                     id="image-label"
                                     value={uploadLabel}
                                     onChange={(e) => setUploadLabel(e.target.value)}
-                                    className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                    className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold"
                                 >
                                     <option value="service-conference">service-conference</option>
                                     <option value="service-event">service-event</option>
@@ -306,7 +306,7 @@ export function AdminImages() {
                                     placeholder="e.g. Hotel Pool View"
                                     value={uploadLabel}
                                     onChange={(e) => setUploadLabel(e.target.value)}
-                                    className="w-full bg-white/10 border border-border text-white placeholder:text-white/50 px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                    className="w-full bg-white/10 border border-border text-white placeholder:text-white/50 px-4 py-2.5 font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold"
                                     title="Image Label"
                                 />
                             )}
@@ -317,7 +317,7 @@ export function AdminImages() {
                                 id="image-section"
                                 value={uploadSection}
                                 onChange={(e) => setUploadSection(e.target.value)}
-                                className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                                className="w-full bg-black border border-border text-white px-4 py-2.5 font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold"
                                 title="Section"
                             >
                                 <option>Hero</option>

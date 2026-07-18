@@ -72,7 +72,7 @@ export function AdminInquiries() {
                         <p className="font-body text-sm text-hotel-gold mt-1">{unreadCount} unread</p>
                     )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     {(["all", "unread", "read"] as const).map((f) => (
                         <button
                             key={f}
@@ -138,7 +138,7 @@ export function AdminInquiries() {
                             <div className="flex items-start justify-between mb-6">
                                 <div>
                                     <h2 className="font-display text-xl text-foreground">{selected.name}</h2>
-                                    <p className="font-body text-sm text-muted-foreground">{selected.email}</p>
+                                    <p className="font-body text-sm text-muted-foreground break-all">{selected.email}</p>
                                     <p className="font-body text-sm text-muted-foreground">{selected.phone || "No phone"}</p>
                                 </div>
                                 <span className="font-body text-xs text-muted-foreground">
@@ -146,7 +146,7 @@ export function AdminInquiries() {
                                 </span>
                             </div>
                             <div className="border-t border-border pt-4">
-                                <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-line">
+                                <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-line break-words">
                                     {selected.message}
                                 </p>
                             </div>

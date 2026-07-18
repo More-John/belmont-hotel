@@ -75,7 +75,7 @@ export function AdminReservations() {
                         <p className="font-body text-sm text-hotel-gold mt-1">{pendingCount} pending</p>
                     )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     {(["all", "pending", "confirmed", "cancelled"] as const).map((f) => (
                         <button
                             key={f}
@@ -134,7 +134,7 @@ export function AdminReservations() {
                             <div className="flex items-start justify-between mb-6">
                                 <div>
                                     <h2 className="font-display text-xl text-foreground">{selected.guestName}</h2>
-                                    <p className="font-body text-sm text-muted-foreground">{selected.guestEmail}</p>
+                                    <p className="font-body text-sm text-muted-foreground break-all">{selected.guestEmail}</p>
                                     <p className="font-body text-sm text-muted-foreground">{selected.guestPhone}</p>
                                 </div>
                                 <div className="flex flex-col items-end gap-2">
@@ -144,7 +144,7 @@ export function AdminReservations() {
                                     <select
                                         value={selected.status}
                                         onChange={(e) => updateStatus(selected, e.target.value)}
-                                        className="bg-muted border border-border text-foreground px-3 py-1 font-body text-xs focus:outline-none focus:border-hotel-gold capitalize"
+                                        className="bg-muted border border-border text-foreground px-3 py-1 font-body text-base sm:text-xs focus:outline-none focus:border-hotel-gold capitalize"
                                         title="Update Status"
                                     >
                                         <option value="pending">Pending</option>
@@ -176,7 +176,7 @@ export function AdminReservations() {
                             {selected.specialRequests && (
                                 <div className="mb-6">
                                     <p className="font-body text-xs text-muted-foreground mb-1">Special Requests</p>
-                                    <p className="font-body text-sm text-foreground leading-relaxed">
+                                    <p className="font-body text-sm text-foreground leading-relaxed break-words">
                                         {selected.specialRequests}
                                     </p>
                                 </div>
