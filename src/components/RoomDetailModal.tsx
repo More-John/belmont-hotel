@@ -197,7 +197,7 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                     <Button
                         variant="outline"
                         onClick={() => onOpenChange(false)}
-                        className="w-full border-hotel-gold/30 text-hotel-white hover:bg-hotel-white/10 hover:text-hotel-white font-body tracking-wide transition-colors"
+                        className="w-full bg-transparent border-hotel-gold/30 text-hotel-white hover:bg-hotel-white/10 hover:text-hotel-white font-body tracking-wide transition-colors"
                     >
                         GO BACK
                     </Button>
