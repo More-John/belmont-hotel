@@ -76,7 +76,7 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-hotel-black border border-hotel-gold/50 shadow-xl">
+            <DialogContent className="w-[95vw] sm:w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-hotel-black border border-hotel-gold/50 shadow-xl p-4 sm:p-6 [&>button>svg]:text-hotel-white">
                 <DialogHeader>
                     <DialogTitle className="font-display text-2xl text-hotel-white tracking-wider">
                         {room.label}
@@ -92,7 +92,7 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                     {/* Main Image */}
                     {room.images && room.images.length > 0 ? (
                         <div className="space-y-2">
-                            <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30">
+                            <div className="relative h-48 sm:h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30">
                                 <Image
                                     src={room.images[currentImgIdx]}
                                     alt={room.label}
@@ -116,7 +116,7 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                             )}
                         </div>
                     ) : (
-                        <div className="relative h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30 bg-hotel-black/50 flex items-center justify-center">
+                        <div className="relative h-48 sm:h-64 w-full rounded-md overflow-hidden border border-hotel-gold/30 bg-hotel-black/50 flex items-center justify-center">
                             <span className="text-hotel-white/50 font-body text-sm">Image coming soon</span>
                         </div>
                     )}
@@ -193,12 +193,21 @@ export function RoomDetailModal({ room, open, onOpenChange, onBookNow }: RoomDet
                     </div>
                 </div>
 
-                <Button
-                    onClick={handleBookClick}
-                    className="mt-6 w-full bg-hotel-gold text-hotel-black font-body tracking-wide hover:bg-hotel-gold-light transition-colors"
-                >
-                    BOOK THIS ROOM
-                </Button>
+                <div className="mt-6 flex flex-col-reverse sm:flex-row gap-3">
+                    <Button
+                        variant="outline"
+                        onClick={() => onOpenChange(false)}
+                        className="w-full border-hotel-gold/30 text-hotel-white hover:bg-hotel-white/10 hover:text-hotel-white font-body tracking-wide transition-colors"
+                    >
+                        GO BACK
+                    </Button>
+                    <Button
+                        onClick={handleBookClick}
+                        className="w-full bg-hotel-gold text-hotel-black font-body tracking-wide hover:bg-hotel-gold-light transition-colors"
+                    >
+                        BOOK THIS ROOM
+                    </Button>
+                </div>
             </DialogContent>
         </Dialog>
     );
