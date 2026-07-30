@@ -19,13 +19,25 @@ export function SplashScreen() {
   if (!visible) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-[100] bg-hotel-black flex items-center justify-center transition-opacity duration-600 ${fadeOut ? "opacity-0" : "opacity-100"
+    <>
+      <style suppressHydrationWarning>{`
+        @keyframes forceFadeOut {
+          0% { opacity: 1; }
+          100% { opacity: 0; visibility: hidden; }
+        }
+        .splash-force-fade {
+          animation: forceFadeOut 0.5s ease-in-out 2.5s forwards;
+        }
+      `}</style>
+      <div
+        className={`fixed inset-0 z-[100] bg-hotel-black flex items-center justify-center transition-opacity duration-500 pointer-events-none splash-force-fade ${
+          fadeOut ? "opacity-0" : "opacity-100"
         }`}
-    >
+      >
       <div className="flex flex-col items-center gap-6 animate-fade-in">
         <img src={belmontLogo.src} alt="Belmont Hotel" className="w-40 md:w-56 h-auto" />
       </div>
     </div>
+    </>
   );
 }

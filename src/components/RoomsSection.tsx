@@ -129,11 +129,11 @@ export function RoomsSection() {
     >
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700 bg-hotel-black"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-700 bg-hotel-black brightness-110 saturate-105 contrast-105"
         style={{ backgroundImage: currentRoom?.images?.[0] ? `url(${currentRoom.images[0]})` : undefined }}
       />
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-hotel-black/60" />
+      <div className="absolute inset-0 bg-hotel-black/10" />
 
       {/* Navigation arrows */}
       <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 flex justify-between z-20 pointer-events-none">
@@ -156,9 +156,9 @@ export function RoomsSection() {
       </div>
 
       {/* Content Container */}
-      <div className="relative z-10 text-center px-4 max-w-3xl w-full">
+      <div className="relative z-10 text-center px-4 w-full h-[85vh] flex flex-col justify-between py-12 pointer-events-none">
         {/* Tab navigation */}
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-4 pointer-events-auto">
           {rooms.map((r, i) => (
             <button
               key={r.id}
@@ -171,27 +171,19 @@ export function RoomsSection() {
           ))}
         </div>
 
-        {/* Room title */}
-        <h3 className="font-display text-4xl md:text-5xl text-hotel-white tracking-wider mb-6 transition-all duration-300">
-          {currentRoom.label}
-        </h3>
 
-        {/* Room description */}
-        <p className="font-body text-hotel-white/80 max-w-2xl mx-auto mb-10 leading-relaxed min-h-[80px]">
-          {currentRoom.desc}
-        </p>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pointer-events-auto mb-4">
           <button
             onClick={handleViewDetails}
-            className="border border-hotel-gold text-hotel-gold font-body tracking-wide text-sm px-8 py-3 hover:bg-hotel-gold hover:text-hotel-black transition-colors"
+            className="border border-hotel-gold text-hotel-gold font-body tracking-wide text-sm px-8 py-3 hover:bg-hotel-gold hover:text-hotel-black transition-colors bg-hotel-black/40 backdrop-blur-sm"
           >
             VIEW DETAILS
           </button>
           <button
             onClick={() => handleBookNow(currentRoom)}
-            className="bg-hotel-gold text-hotel-black font-body tracking-wide text-sm px-8 py-3 hover:bg-hotel-gold/90 transition-colors"
+            className="bg-hotel-gold text-hotel-black font-body tracking-wide text-sm px-8 py-3 hover:bg-hotel-gold/90 transition-colors shadow-lg"
           >
             MAKE A RESERVATION
           </button>

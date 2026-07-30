@@ -67,10 +67,10 @@ export function ServicesSection() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                 {services.map((s) => (
                     <div key={s.label} className="relative h-64 md:h-80 group overflow-hidden">
-                        {s.image && <img src={s.image} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
-                        <div className="absolute inset-0 bg-hotel-black/50 flex flex-col items-center justify-center gap-3">
-                            <s.icon className="w-10 h-10 text-hotel-gold" strokeWidth={1.5} />
-                            <span className="font-body text-sm tracking-[0.3em] text-hotel-white font-bold">
+                        {s.image && <img src={s.image} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-110 saturate-105 contrast-105" />}
+                        <div className="absolute inset-0 bg-hotel-black/30 flex flex-col items-center justify-center gap-3">
+                            <s.icon className="w-8 h-8 md:w-10 md:h-10 text-hotel-gold" strokeWidth={1.5} />
+                            <span className="font-body text-xs md:text-sm tracking-[0.3em] text-hotel-white font-bold text-center px-2">
                                 {s.label}
                             </span>
                         </div>

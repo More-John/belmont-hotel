@@ -46,13 +46,13 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-hotel-black"
+      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-hotel-black"
     >
       {/* Slides */}
       {slides.map((slide, i) => (
         <div
           key={i}
-          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out brightness-110 saturate-105 contrast-105"
           style={{
             backgroundImage: `url(${slide.image})`,
             opacity: i === current ? 1 : 0,
@@ -62,65 +62,66 @@ export function HeroSection() {
       ))}
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-hotel-black/60" />
+      <div className="absolute inset-0 bg-hotel-black/30" />
 
       {/* Navigation arrows */}
       <button
         onClick={prev}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 text-hotel-white/70 hover:text-hotel-gold transition-colors"
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 text-hotel-white/70 hover:text-hotel-gold transition-colors bg-hotel-black/20 rounded-full"
         aria-label="Previous slide"
       >
-        <ChevronLeft className="w-8 h-8 md:w-12 md:h-12" />
+        <ChevronLeft className="w-8 h-8 md:w-10 md:h-10" />
       </button>
       <button
         onClick={next}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 text-hotel-white/70 hover:text-hotel-gold transition-colors"
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 text-hotel-white/70 hover:text-hotel-gold transition-colors bg-hotel-black/20 rounded-full"
         aria-label="Next slide"
       >
-        <ChevronRight className="w-8 h-8 md:w-12 md:h-12" />
+        <ChevronRight className="w-8 h-8 md:w-10 md:h-10" />
       </button>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-3xl">
-        <div className="flex justify-center gap-1 mb-6">
-          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-5 h-5 fill-hotel-gold text-hotel-gold" />
+      <div className="relative z-10 text-center px-4 max-w-3xl pointer-events-none pt-12 md:pt-0">
+        <div className="flex justify-center gap-1 mb-4 md:mb-6">
+          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
         </div>
 
-        <h1 className="font-display text-6xl md:text-8xl font-bold text-hotel-white tracking-wider mb-4">
+        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-hotel-white tracking-wider mb-2 md:mb-4">
           BELMONT
         </h1>
-        <p className="font-display text-xl md:text-2xl text-hotel-white tracking-[0.15em] mb-10">
+        <p className="font-display text-base md:text-xl text-hotel-white tracking-[0.15em] mb-8 md:mb-10">
           HOTEL IN ABUJA
         </p>
 
         <a
           href="#reservation"
-          className="inline-block border-2 border-hotel-gold text-hotel-white font-body tracking-[0.3em] text-sm px-10 py-4 hover:bg-hotel-gold hover:text-hotel-black transition-colors"
+          className="inline-block border-2 border-hotel-gold text-hotel-white font-body tracking-[0.2em] text-xs md:text-sm px-8 py-3 md:px-10 md:py-4 hover:bg-hotel-gold hover:text-hotel-black transition-colors pointer-events-auto bg-hotel-black/20 backdrop-blur-sm"
         >
           MAKE A RESERVATION
         </a>
 
-        <div className="mt-10 flex items-center justify-center gap-2 text-hotel-white/80 text-sm">
-          <MapPin className="w-4 h-4 text-hotel-gold" />
-          <span className="font-body tracking-wider">
+        <div className="mt-8 flex items-center justify-center gap-2 text-hotel-white/90 text-xs md:text-sm drop-shadow-md">
+          <MapPin className="w-3 h-3 md:w-4 md:h-4 text-hotel-gold flex-shrink-0" />
+          <span className="font-body tracking-wider text-left">
             Plot 1032 R.I. Uzoma Street, Wuye, Abuja, 900001 Wupa, Nigeria
           </span>
         </div>
 
         {/* Dots */}
-        <div className="mt-8 flex justify-center gap-3">
+        <div className="mt-8 flex justify-center gap-3 pointer-events-auto">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === current
-                ? "bg-hotel-gold scale-125"
-                : "bg-hotel-white/40 hover:bg-hotel-white/70"
-                }`}
+              className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300 ${
+                i === current
+                  ? "bg-hotel-gold scale-125"
+                  : "bg-hotel-white/40 hover:bg-hotel-white/70"
+              }`}
               aria-label={`Go to slide ${i + 1}`}
             />
           ))}
