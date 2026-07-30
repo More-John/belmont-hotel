@@ -81,38 +81,26 @@ export function HeroSection() {
       </button>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-3xl pointer-events-none pt-12 md:pt-0">
-        <div className="flex justify-center gap-1 mb-4 md:mb-6">
-          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
-          <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
-        </div>
+      <div className="relative z-10 text-center px-4 w-full max-w-3xl h-[100dvh] flex flex-col justify-between pointer-events-none py-24 md:py-32">
+        <div>
+          <div className="flex justify-center gap-1 mb-4 md:mb-6">
+            <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+            <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+            <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+            <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+            <Star className="w-4 h-4 md:w-5 md:h-5 fill-hotel-gold text-hotel-gold" />
+          </div>
 
-        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-hotel-white tracking-wider mb-2 md:mb-4">
-          BELMONT
-        </h1>
-        <p className="font-display text-base md:text-xl text-hotel-white tracking-[0.15em] mb-8 md:mb-10">
-          HOTEL IN ABUJA
-        </p>
-
-        <a
-          href="#reservation"
-          className="inline-block border-2 border-hotel-gold text-hotel-white font-body tracking-[0.2em] text-xs md:text-sm px-8 py-3 md:px-10 md:py-4 hover:bg-hotel-gold hover:text-hotel-black transition-colors pointer-events-auto bg-hotel-black/20 backdrop-blur-sm"
-        >
-          MAKE A RESERVATION
-        </a>
-
-        <div className="mt-8 flex items-center justify-center gap-2 text-hotel-white/90 text-xs md:text-sm drop-shadow-md">
-          <MapPin className="w-3 h-3 md:w-4 md:h-4 text-hotel-gold flex-shrink-0" />
-          <span className="font-body tracking-wider text-left">
-            Plot 1032 R.I. Uzoma Street, Wuye, Abuja, 900001 Wupa, Nigeria
-          </span>
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-hotel-white tracking-wider mb-2 md:mb-4">
+            BELMONT
+          </h1>
+          <p className="font-display text-base md:text-xl text-hotel-white tracking-[0.15em]">
+            HOTEL IN ABUJA
+          </p>
         </div>
 
         {/* Dots */}
-        <div className="mt-8 flex justify-center gap-3 pointer-events-auto">
+        <div className="flex justify-center gap-3 pointer-events-auto">
           {slides.map((_, i) => (
             <button
               key={i}
