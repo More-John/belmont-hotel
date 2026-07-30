@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UtensilsCrossed, Wine, PartyPopper, Presentation, ChefHat } from "lucide-react";
+import { UtensilsCrossed, Wine, Presentation, ChefHat } from "lucide-react";
 
 
 const defaultServices = [
     { icon: UtensilsCrossed, label: "RESTAURANT", image: "" },
     { icon: Wine, label: "MINI BAR", image: "" },
-    { icon: PartyPopper, label: "EVENT CENTER", image: "" },
     { icon: Presentation, label: "CONFERENCE HALL", image: "" },
     { icon: ChefHat, label: "CATERING SERVICES", image: "" },
 ];
@@ -27,7 +26,6 @@ export function ServicesSection() {
                             let targetLabel = "";
                             if (service.label === "RESTAURANT") targetLabel = "service-restaurant";
                             else if (service.label === "MINI BAR") targetLabel = "service-minibar";
-                            else if (service.label === "EVENT CENTER") targetLabel = "service-event";
                             else if (service.label === "CONFERENCE HALL") targetLabel = "service-conference";
                             else if (service.label === "CATERING SERVICES") targetLabel = "service-catering";
 
@@ -64,7 +62,7 @@ export function ServicesSection() {
             </div>
 
             {/* Service cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {services.map((s) => (
                     <div key={s.label} className="relative h-64 md:h-80 group overflow-hidden">
                         {s.image && <img src={s.image} alt={s.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-110 saturate-105 contrast-105" />}
