@@ -23,6 +23,7 @@ import {
     DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { defaultPosts } from "@/data/defaultPosts";
 
 export interface Post {
     id: string;
@@ -42,8 +43,8 @@ export interface Post {
 const CATEGORIES = ["All", "Event", "Service Update", "Blog", "News"];
 
 export function AdminPosts() {
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [posts, setPosts] = useState<Post[]>(defaultPosts as Post[]);
+    const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -74,7 +75,9 @@ export function AdminPosts() {
             const res = await fetch("/api/posts");
             if (res.ok) {
                 const data = await res.json();
-                setPosts(data);
+                if (Array.isArray(data) && data.length > 0) {
+                    setPosts(data);
+                }
             }
         } catch (error) {
             console.error("Failed to load posts", error);

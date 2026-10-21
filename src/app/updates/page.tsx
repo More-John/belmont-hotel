@@ -11,26 +11,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-
-interface PostItem {
-    id: string;
-    title: string;
-    slug: string;
-    category: string;
-    excerpt: string;
-    content: string;
-    imageUrl: string | null;
-    author: string;
-    status: string;
-    eventDate: string | null;
-    createdAt: string;
-}
+import { defaultPosts, type PostItem } from "@/data/defaultPosts";
 
 const CATEGORIES = ["All", "Event", "Service Update", "Blog", "News"];
 
 export default function UpdatesPage() {
-    const [posts, setPosts] = useState<PostItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [posts, setPosts] = useState<PostItem[]>(defaultPosts);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [search, setSearch] = useState("");
     const [readingPost, setReadingPost] = useState<PostItem | null>(null);
@@ -41,12 +27,12 @@ export default function UpdatesPage() {
                 const res = await fetch("/api/posts?status=published");
                 if (res.ok) {
                     const data = await res.json();
-                    setPosts(data);
+                    if (Array.isArray(data) && data.length > 0) {
+                        setPosts(data);
+                    }
                 }
             } catch (err) {
-                console.error("Failed to fetch posts", err);
-            } finally {
-                setLoading(false);
+                console.error("Failed to fetch posts from API, using default posts:", err);
             }
         }
         fetchPosts();
@@ -120,11 +106,7 @@ export default function UpdatesPage() {
                 </div>
 
                 {/* Posts Grid */}
-                {loading ? (
-                    <div className="text-center py-20 text-hotel-white/50 text-sm">
-                        Loading articles and event announcements...
-                    </div>
-                ) : filtered.length === 0 ? (
+                {filtered.length === 0 ? (
                     <div className="text-center py-20 bg-hotel-dark/40 rounded-lg border border-border/40 p-8">
                         <p className="text-hotel-white/60 text-sm">No updates found for this criteria.</p>
                     </div>
