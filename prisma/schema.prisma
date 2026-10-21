@@ -40,3 +40,18 @@ model Image {
   order     Int      @default(0)
   createdAt DateTime @default(now())
 }
+
+model Post {
+  id        String    @id @default(cuid())
+  title     String
+  slug      String    @unique
+  category  String
+  excerpt   String
+  content   String
+  imageUrl  String?
+  author    String    @default("Belmont Hotel")
+  status    String    @default("published")
+  eventDate DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}

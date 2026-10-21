@@ -3,12 +3,27 @@
 import { useState, useEffect } from "react";
 import { UtensilsCrossed, Wine, Presentation, ChefHat } from "lucide-react";
 
-
 const defaultServices = [
-    { icon: UtensilsCrossed, label: "RESTAURANT", image: "" },
-    { icon: Wine, label: "MINI BAR", image: "" },
-    { icon: Presentation, label: "CONFERENCE HALL", image: "" },
-    { icon: ChefHat, label: "CATERING SERVICES", image: "" },
+    {
+        icon: UtensilsCrossed,
+        label: "RESTAURANT",
+        image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302686/belmont-hotel/f5klmtyyw8xlaurxq1aw.jpg"
+    },
+    {
+        icon: Wine,
+        label: "MINI BAR",
+        image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302601/belmont-hotel/vwtwkunucjf4jllmormh.jpg"
+    },
+    {
+        icon: Presentation,
+        label: "CONFERENCE HALL",
+        image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785420444/belmont-hotel/wz9hvhgbpp21mhtmeluv.jpg"
+    },
+    {
+        icon: ChefHat,
+        label: "CATERING SERVICES",
+        image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784305013/belmont-hotel/cjlaz22ev7gmecrftsxe.jpg"
+    },
 ];
 
 export function ServicesSection() {

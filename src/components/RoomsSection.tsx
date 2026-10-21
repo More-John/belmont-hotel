@@ -11,7 +11,11 @@ const defaultRooms: Room[] = [
     id: "business-suite",
     label: "BUSINESS SUITE",
     desc: "1 extra-large double bed.\nThe suite features 1 bedroom and 1 bathroom with a bath and free toiletries. The air-conditioned suite provides a flat-screen TV with cable channels, a wardrobe, an electric kettle and a sofa.",
-    images: [],
+    images: [
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785419539/belmont-hotel/et5cxwtpgsoaqdztptme.jpg",
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785419589/belmont-hotel/pff6xmd2hd2tqzglcrik.jpg",
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785419609/belmont-hotel/qrzqio8csilffapjji0c.jpg"
+    ],
     price: 107500,
     bedType: "Extra-large double bed",
     size: "49m²",
@@ -30,7 +34,10 @@ const defaultRooms: Room[] = [
     id: "executive-suite",
     label: "EXECUTIVE SUITE",
     desc: "1 Large Double Bed. Relax in this spacious, air-conditioned double room complete with a large double bed, wardrobe, and a private bathroom with a bathtub. Additional amenities include an electric kettle and a flat-screen TV offering a variety of cable channels.",
-    images: [],
+    images: [
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784300284/belmont-hotel/sncwlrtxyuycylaqc6du.jpg",
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784300534/belmont-hotel/qhvjhunjna6dix7nweat.jpg"
+    ],
     price: 96750,
     bedType: "Large double bed",
     size: "38m²",
@@ -48,7 +55,11 @@ const defaultRooms: Room[] = [
     id: "executive-deluxe",
     label: "EXECUTIVE DELUXE",
     desc: "1 large double bed. The spacious double room features air conditioning, a wardrobe, as well as a private bathroom boasting a bath. This double room offers a flat-screen TV with cable channels.",
-    images: [],
+    images: [
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302363/belmont-hotel/enzwah6rllk0gxgnm5up.jpg",
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302457/belmont-hotel/huav4erxn1vktr596y3v.jpg",
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302492/belmont-hotel/zclp21mzxq8bsfcze8lv.jpg"
+    ],
     price: 80625,
     bedType: "Large double bed",
     size: "34m²",
@@ -66,7 +77,10 @@ const defaultRooms: Room[] = [
     id: "deluxe",
     label: "DELUXE ROOM",
     desc: "Simpler than the standard room but with all the necessary amenities. Every room is simply furnished and decorated and equipped with Air Conditioning, a TV and a private bathroom.",
-    images: [],
+    images: [
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302266/belmont-hotel/z8ldhldxmvdbm89hwpi0.jpg",
+      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302295/belmont-hotel/viudrckt6he4ky49nufz.jpg"
+    ],
     price: 69875,
     bedType: "Double bed",
     size: "24m²",

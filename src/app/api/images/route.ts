@@ -9,8 +9,13 @@ cloudinary.config({
 });
 
 export async function GET() {
-    const images = await prisma.image.findMany({ orderBy: { order: 'asc' } });
-    return NextResponse.json(images);
+    try {
+        const images = await prisma.image.findMany({ orderBy: { order: 'asc' } });
+        return NextResponse.json(images);
+    } catch (error) {
+        console.error("Failed to fetch images from database:", error);
+        return NextResponse.json([]);
+    }
 }
 
 export async function POST(request: Request) {
@@ -69,7 +74,7 @@ export async function DELETE(request: Request) {
         await prisma.image.delete({ where: { id } });
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Cloudinary delete error:", error);
-        return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
+        console.error("Delete image error:", error);
+        return NextResponse.json({ error: 'Failed to delete image' }, { status: 500 });
     }
 }

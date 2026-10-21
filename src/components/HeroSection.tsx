@@ -2,7 +2,24 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Star, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
-const defaultSlides: { image: string, alt: string }[] = [];
+const defaultSlides: { image: string, alt: string }[] = [
+  {
+    image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784304333/belmont-hotel/kxtucqrtgjcczg16lprb.jpg",
+    alt: "Belmont Hotel Abuja Entrance",
+  },
+  {
+    image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785421255/belmont-hotel/tltfaq7ib9wblopbkfpj.jpg",
+    alt: "Belmont Hotel Abuja View",
+  },
+  {
+    image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1786054215/belmont-hotel/uwu6nzja7jcmnujnnphx.jpg",
+    alt: "Belmont Hotel Abuja Suite",
+  },
+  {
+    image: "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785421761/belmont-hotel/pynp5hmdt0ymyx1rfmvq.jpg",
+    alt: "Belmont Hotel Abuja Ambience",
+  },
+];
 
 export function HeroSection() {
   const [slides, setSlides] = useState(defaultSlides);
