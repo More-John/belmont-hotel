@@ -172,6 +172,6 @@ belmont-hotel/
 
 ## Author & Acknowledgements
 
-* **Developed by**: Belmont Hotel Engineering Team
+* **Developed by**: John Albert
 * **Location**: Abuja, Nigeria
 * **Design System**: Tailored boutique luxury hospitality guidelines
