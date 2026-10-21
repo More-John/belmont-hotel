@@ -4,20 +4,63 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "@/assets/belmont-logo.png";
+import { Loader2 } from "lucide-react";
 
 export default function AdminLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [submitting, setSubmitting] = useState(false);
     const router = useRouter();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (email && password) {
-            localStorage.setItem("admin_logged_in", "true");
-            router.push("/admin/dashboard");
-        } else {
+        setError("");
+        const trimmedEmail = email.trim();
+
+        if (!trimmedEmail || !password) {
             setError("Please enter your email and password.");
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            // 1. Try API authentication endpoint
+            const res = await fetch("/api/auth", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: trimmedEmail, password }),
+            });
+
+            if (res.ok) {
+                localStorage.setItem("admin_logged_in", "true");
+                router.push("/admin/dashboard");
+                return;
+            }
+
+            // 2. Client-side fallback to NEXT_PUBLIC env variables
+            const envEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "johnnyscreenpage1@gmail.com";
+            const envPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "BelmontHotelAbuja";
+
+            if (trimmedEmail.toLowerCase() === envEmail.toLowerCase() && password === envPass) {
+                localStorage.setItem("admin_logged_in", "true");
+                router.push("/admin/dashboard");
+                return;
+            }
+
+            setError("Invalid email or password. Please try again.");
+        } catch (err) {
+            const envEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "johnnyscreenpage1@gmail.com";
+            const envPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "BelmontHotelAbuja";
+
+            if (trimmedEmail.toLowerCase() === envEmail.toLowerCase() && password === envPass) {
+                localStorage.setItem("admin_logged_in", "true");
+                router.push("/admin/dashboard");
+                return;
+            }
+            setError("Invalid email or password.");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -36,7 +79,7 @@ export default function AdminLogin() {
 
                 <form onSubmit={handleLogin} className="space-y-5">
                     {error && (
-                        <p className="text-destructive text-sm font-body text-center">{error}</p>
+                        <p className="text-rose-400 bg-rose-500/10 border border-rose-500/30 rounded px-3 py-2 text-sm font-body text-center">{error}</p>
                     )}
                     <div>
                         <label htmlFor="email" className="block font-body text-hotel-white/70 text-sm mb-1.5">
@@ -45,6 +88,7 @@ export default function AdminLogin() {
                         <input
                             id="email"
                             type="email"
+                            required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="admin@belmonthotel.com"
@@ -59,6 +103,7 @@ export default function AdminLogin() {
                         <input
                             id="password"
                             type="password"
+                            required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
@@ -68,8 +113,10 @@ export default function AdminLogin() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-hotel-gold text-hotel-black font-body font-bold tracking-[0.2em] text-sm py-3.5 hover:bg-hotel-gold-light transition-colors"
+                        disabled={submitting}
+                        className="w-full bg-hotel-gold text-hotel-black font-body font-bold tracking-[0.2em] text-sm py-3.5 hover:bg-hotel-gold-light transition-colors flex items-center justify-center gap-2"
                     >
+                        {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                         SIGN IN
                     </button>
                 </form>

@@ -2,21 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, Image as ImageIcon, MessageSquare, CalendarDays, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, Image as ImageIcon, MessageSquare, CalendarDays, Newspaper, LogOut, Menu, X } from "lucide-react";
 import NextImage from "next/image";
 import logo from "@/assets/belmont-logo.png";
 import { AdminOverview } from "@/components/admin/AdminOverview";
 import { AdminImages } from "@/components/admin/AdminImages";
 import { AdminInquiries } from "@/components/admin/AdminInquiries";
-import { AdminReservations } from "@/components/admin/AdminReservations";   // <-- import
+import { AdminReservations } from "@/components/admin/AdminReservations";
+import { AdminPosts } from "@/components/admin/AdminPosts";
 
-type Tab = "overview" | "images" | "inquiries" | "reservations";   // <-- add "reservations"
+type Tab = "overview" | "images" | "inquiries" | "reservations" | "posts";
 
 const navItems: { id: Tab; label: string; icon: React.ElementType }[] = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
     { id: "images", label: "Images", icon: ImageIcon },
     { id: "inquiries", label: "Inquiries", icon: MessageSquare },
-    { id: "reservations", label: "Reservations", icon: CalendarDays },   // <-- new tab
+    { id: "reservations", label: "Reservations", icon: CalendarDays },
+    { id: "posts", label: "Updates & Blog", icon: Newspaper },
 ];
 
 export default function AdminDashboard() {
@@ -119,7 +121,8 @@ export default function AdminDashboard() {
                 {activeTab === "overview" && <AdminOverview />}
                 {activeTab === "images" && <AdminImages />}
                 {activeTab === "inquiries" && <AdminInquiries />}
-                {activeTab === "reservations" && <AdminReservations />}   {/* <-- new */}
+                {activeTab === "reservations" && <AdminReservations />}
+                {activeTab === "posts" && <AdminPosts />}
             </main>
         </div>
     );

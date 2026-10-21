@@ -39,7 +39,7 @@ export function Footer() {
                     <span className="font-body text-sm text-hotel-white/60 tracking-wider">FOLLOW US</span>
                     <div className="flex gap-4">
                         <a
-                            href="https://facebook.com/your_page"
+                            href="https://www.facebook.com/Belmonthotelabuja"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-hotel-white/80 hover:text-hotel-gold transition-colors"
@@ -59,7 +59,7 @@ export function Footer() {
                         </a>
 
                         <a
-                            href="https://twitter.com/your_handle"
+                            href="https://x.com/abuja_hotel?s=11"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-hotel-white/80 hover:text-hotel-gold transition-colors"

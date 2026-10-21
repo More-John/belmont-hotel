@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Image, MessageSquare, CalendarDays } from "lucide-react";
+import { Image, MessageSquare, CalendarDays, Newspaper } from "lucide-react";
 
 type Inquiry = {
     id: string;
@@ -27,6 +27,7 @@ export function AdminOverview() {
         totalImages: 0,
         newInquiries: 0,
         totalReservations: 0,
+        totalPosts: 0,
     });
     const [recentInquiries, setRecentInquiries] = useState<Inquiry[]>([]);
     const [recentReservations, setRecentReservations] = useState<Reservation[]>([]);
@@ -78,6 +79,17 @@ export function AdminOverview() {
                 console.error("Reservations fetch failed:", err);
             }
 
+            let postsCount = 0;
+            try {
+                const res = await fetch("/api/posts");
+                if (res.ok) {
+                    const postsData = await res.json();
+                    postsCount = postsData.length;
+                }
+            } catch (err) {
+                console.error("Posts fetch failed:", err);
+            }
+
             const unreadInquiries = inquiries.filter((i) => i.status === "unread");
             const latestInquiries = inquiries.slice(0, 5);
             const latestReservations = reservations.slice(0, 5);
@@ -86,6 +98,7 @@ export function AdminOverview() {
                 totalImages: images.length,
                 newInquiries: unreadInquiries.length,
                 totalReservations: reservations.length,
+                totalPosts: postsCount,
             });
             setRecentInquiries(latestInquiries);
             setRecentReservations(latestReservations);
@@ -106,7 +119,7 @@ export function AdminOverview() {
             </h1>
 
             {/* Stats Grid - removed Page Views */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div className="bg-card border border-border p-5">
                     <div className="flex items-center justify-between mb-3">
                         <Image className="w-5 h-5 text-hotel-gold" />
@@ -129,6 +142,14 @@ export function AdminOverview() {
                     </div>
                     <p className="font-display text-3xl text-foreground">{stats.totalReservations}</p>
                     <p className="font-body text-sm text-muted-foreground mt-1">Reservations</p>
+                </div>
+
+                <div className="bg-card border border-border p-5">
+                    <div className="flex items-center justify-between mb-3">
+                        <Newspaper className="w-5 h-5 text-hotel-gold" />
+                    </div>
+                    <p className="font-display text-3xl text-foreground">{stats.totalPosts}</p>
+                    <p className="font-body text-sm text-muted-foreground mt-1">Updates & Blogs</p>
                 </div>
             </div>
 
