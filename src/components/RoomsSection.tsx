@@ -4,121 +4,61 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { RoomDetailModal, type Room } from "@/components/RoomDetailModal";
-
-// Extended room data including modal-specific fields
-const defaultRooms: Room[] = [
-  {
-    id: "business-suite",
-    label: "BUSINESS SUITE",
-    desc: "1 extra-large double bed.\nThe suite features 1 bedroom and 1 bathroom with a bath and free toiletries. The air-conditioned suite provides a flat-screen TV with cable channels, a wardrobe, an electric kettle and a sofa.",
-    images: [
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785419539/belmont-hotel/et5cxwtpgsoaqdztptme.jpg",
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785419589/belmont-hotel/pff6xmd2hd2tqzglcrik.jpg",
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1785419609/belmont-hotel/qrzqio8csilffapjji0c.jpg"
-    ],
-    price: 107500,
-    bedType: "Extra-large double bed",
-    size: "49m²",
-    amenities: [
-      "Free Wi-Fi",
-      "Flat-screen TV",
-      "Air conditioning",
-      "Bath with bathtub",
-      "Electric kettle",
-      "Work desk",
-      "Refrigerator",
-      "Wake-up service",
-    ],
-  },
-  {
-    id: "executive-suite",
-    label: "EXECUTIVE SUITE",
-    desc: "1 Large Double Bed. Relax in this spacious, air-conditioned double room complete with a large double bed, wardrobe, and a private bathroom with a bathtub. Additional amenities include an electric kettle and a flat-screen TV offering a variety of cable channels.",
-    images: [
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784300284/belmont-hotel/sncwlrtxyuycylaqc6du.jpg",
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784300534/belmont-hotel/qhvjhunjna6dix7nweat.jpg"
-    ],
-    price: 96750,
-    bedType: "Large double bed",
-    size: "38m²",
-    amenities: [
-      "Free Wi-Fi",
-      "Flat-screen TV",
-      "Air conditioning",
-      "Private bathroom",
-      "Electric kettle",
-      "Work desk ",
-      "Wake-up service",
-    ],
-  },
-  {
-    id: "executive-deluxe",
-    label: "EXECUTIVE DELUXE",
-    desc: "1 large double bed. The spacious double room features air conditioning, a wardrobe, as well as a private bathroom boasting a bath. This double room offers a flat-screen TV with cable channels.",
-    images: [
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302363/belmont-hotel/enzwah6rllk0gxgnm5up.jpg",
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302457/belmont-hotel/huav4erxn1vktr596y3v.jpg",
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302492/belmont-hotel/zclp21mzxq8bsfcze8lv.jpg"
-    ],
-    price: 80625,
-    bedType: "Large double bed",
-    size: "34m²",
-    amenities: [
-      "Free Wi-Fi",
-      "Flat-screen TV",
-      "Air conditioning",
-      "Private bathroom",
-      "Electric kettle",
-      "Work desk",
-      "Wake-up service",
-    ],
-  },
-  {
-    id: "deluxe",
-    label: "DELUXE ROOM",
-    desc: "Simpler than the standard room but with all the necessary amenities. Every room is simply furnished and decorated and equipped with Air Conditioning, a TV and a private bathroom.",
-    images: [
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302266/belmont-hotel/z8ldhldxmvdbm89hwpi0.jpg",
-      "https://res.cloudinary.com/dumtoo8hl/image/upload/v1784302295/belmont-hotel/viudrckt6he4ky49nufz.jpg"
-    ],
-    price: 69875,
-    bedType: "Double bed",
-    size: "24m²",
-    amenities: ["Free Wi-Fi", "TV", "Air conditioning", "Private bathroom", "Wake-up service"],
-  },
-];
+import { defaultRooms } from "@/data/defaultRooms";
+import { fetchRoomsFromApi } from "@/lib/roomsApi";
 
 export function RoomsSection() {
-  const [rooms, setRooms] = useState(defaultRooms);
+  const [rooms, setRooms] = useState<Room[]>(defaultRooms);
   const [activeIdx, setActiveIdx] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
   useEffect(() => {
-    async function fetchImages() {
-      try {
-        const res = await fetch("/api/images");
-        if (res.ok) {
-          const data = await res.json();
-          const roomImages = data.filter((img: any) => img.section === "Rooms");
-          if (roomImages.length > 0) {
-            setRooms((prev) => prev.map(room => {
-              const targetPrefix = `room-${room.id}`;
-              const uploaded = roomImages.filter((img: any) => img.alt?.toLowerCase().startsWith(targetPrefix));
+    async function fetchRoomsAndImages() {
+      let updatedRooms = [...defaultRooms];
 
-              if (uploaded.length > 0) {
-                const sortedImages = uploaded.sort((a: any, b: any) => a.alt.localeCompare(b.alt));
-                return { ...room, images: sortedImages.map((img: any) => img.url) };
-              }
-              return room;
-            }));
+      // 1. Fetch customized room details (price, description, bedType, size, amenities)
+      try {
+        const roomData = await fetchRoomsFromApi();
+        if (Array.isArray(roomData) && roomData.length > 0) {
+          updatedRooms = roomData;
+        }
+      } catch (err) {
+        console.error("Failed to fetch room details:", err);
+      }
+
+      // 2. Fetch uploaded room gallery images
+      try {
+        const imgRes = await fetch("/api/images");
+        if (imgRes.ok) {
+          const imgData = await imgRes.json();
+          if (Array.isArray(imgData)) {
+            const roomImages = imgData.filter((img: any) => img.section === "Rooms");
+            if (roomImages.length > 0) {
+              updatedRooms = updatedRooms.map((room) => {
+                const targetPrefix = `room-${room.id}`;
+                const uploaded = roomImages.filter((img: any) =>
+                  img.alt?.toLowerCase().startsWith(targetPrefix)
+                );
+                if (uploaded.length > 0) {
+                  const sortedImages = uploaded.sort((a: any, b: any) =>
+                    (a.alt || "").localeCompare(b.alt || "")
+                  );
+                  return { ...room, images: sortedImages.map((img: any) => img.url) };
+                }
+                return room;
+              });
+            }
           }
         }
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error("Failed to fetch room images:", err);
       }
+
+      setRooms(updatedRooms);
     }
-    fetchImages();
+
+    fetchRoomsAndImages();
   }, []);
 
   const currentRoom = rooms[activeIdx];
@@ -129,7 +69,6 @@ export function RoomsSection() {
   };
 
   const handleBookNow = (room: Room) => {
-    // Scroll to reservation section smoothly
     const reservationSection = document.getElementById("reservation");
     if (reservationSection) {
       reservationSection.scrollIntoView({ behavior: "smooth" });
@@ -177,15 +116,14 @@ export function RoomsSection() {
             <button
               key={r.id}
               onClick={() => setActiveIdx(i)}
-              className={`font-body text-xs md:text-sm tracking-[0.2em] transition-colors ${i === activeIdx ? "text-hotel-gold" : "text-hotel-white"
-                }`}
+              className={`font-body text-xs md:text-sm tracking-[0.2em] transition-colors ${
+                i === activeIdx ? "text-hotel-gold" : "text-hotel-white"
+              }`}
             >
               {r.label}
             </button>
           ))}
         </div>
-
-
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pointer-events-auto mb-4">

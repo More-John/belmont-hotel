@@ -93,7 +93,7 @@ export default function AdminLogin() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="admin@belmonthotel.com"
                             title="Enter your email address"
-                            className="w-full bg-hotel-black border border-border text-hotel-white placeholder:text-muted-foreground px-4 py-3 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                            className="w-full bg-hotel-black border border-border text-hotel-white placeholder:text-muted-foreground px-4 py-3 min-h-[46px] font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold"
                         />
                     </div>
                     <div>
@@ -108,7 +108,7 @@ export default function AdminLogin() {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             title="Enter your password"
-                            className="w-full bg-hotel-black border border-border text-hotel-white placeholder:text-muted-foreground px-4 py-3 font-body text-sm focus:outline-none focus:border-hotel-gold"
+                            className="w-full bg-hotel-black border border-border text-hotel-white placeholder:text-muted-foreground px-4 py-3 min-h-[46px] font-body text-base sm:text-sm focus:outline-none focus:border-hotel-gold"
                         />
                     </div>
                     <button

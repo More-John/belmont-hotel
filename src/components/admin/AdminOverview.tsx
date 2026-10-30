@@ -109,72 +109,72 @@ export function AdminOverview() {
     }, []);
 
     if (loading) {
-        return <div className="p-8 text-center">Loading dashboard...</div>;
+        return <div className="p-8 text-center font-body text-sm text-muted-foreground">Loading dashboard...</div>;
     }
 
     return (
-        <div>
-            <h1 className="font-display text-2xl text-foreground tracking-wider mb-6">
-                Dashboard
+        <div className="w-full min-w-0">
+            <h1 className="font-display text-xl sm:text-2xl text-foreground tracking-wider mb-4 sm:mb-6">
+                Dashboard Overview
             </h1>
 
-            {/* Stats Grid - removed Page Views */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div className="bg-card border border-border p-5">
-                    <div className="flex items-center justify-between mb-3">
-                        <Image className="w-5 h-5 text-hotel-gold" />
+            {/* Stats Grid - 2x2 on phones, 4 columns on desktop */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <div className="bg-card border border-border p-4 sm:p-5">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        <Image className="w-4 h-4 sm:w-5 sm:h-5 text-hotel-gold" />
                     </div>
-                    <p className="font-display text-3xl text-foreground">{stats.totalImages}</p>
-                    <p className="font-body text-sm text-muted-foreground mt-1">Total Images</p>
+                    <p className="font-display text-2xl sm:text-3xl text-foreground">{stats.totalImages}</p>
+                    <p className="font-body text-xs sm:text-sm text-muted-foreground mt-1 truncate">Total Images</p>
                 </div>
 
-                <div className="bg-card border border-border p-5">
-                    <div className="flex items-center justify-between mb-3">
-                        <MessageSquare className="w-5 h-5 text-hotel-gold" />
+                <div className="bg-card border border-border p-4 sm:p-5">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-hotel-gold" />
                     </div>
-                    <p className="font-display text-3xl text-foreground">{stats.newInquiries}</p>
-                    <p className="font-body text-sm text-muted-foreground mt-1">New Inquiries</p>
+                    <p className="font-display text-2xl sm:text-3xl text-foreground">{stats.newInquiries}</p>
+                    <p className="font-body text-xs sm:text-sm text-muted-foreground mt-1 truncate">New Inquiries</p>
                 </div>
 
-                <div className="bg-card border border-border p-5">
-                    <div className="flex items-center justify-between mb-3">
-                        <CalendarDays className="w-5 h-5 text-hotel-gold" />
+                <div className="bg-card border border-border p-4 sm:p-5">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 text-hotel-gold" />
                     </div>
-                    <p className="font-display text-3xl text-foreground">{stats.totalReservations}</p>
-                    <p className="font-body text-sm text-muted-foreground mt-1">Reservations</p>
+                    <p className="font-display text-2xl sm:text-3xl text-foreground">{stats.totalReservations}</p>
+                    <p className="font-body text-xs sm:text-sm text-muted-foreground mt-1 truncate">Reservations</p>
                 </div>
 
-                <div className="bg-card border border-border p-5">
-                    <div className="flex items-center justify-between mb-3">
-                        <Newspaper className="w-5 h-5 text-hotel-gold" />
+                <div className="bg-card border border-border p-4 sm:p-5">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        <Newspaper className="w-4 h-4 sm:w-5 sm:h-5 text-hotel-gold" />
                     </div>
-                    <p className="font-display text-3xl text-foreground">{stats.totalPosts}</p>
-                    <p className="font-body text-sm text-muted-foreground mt-1">Updates & Blogs</p>
+                    <p className="font-display text-2xl sm:text-3xl text-foreground">{stats.totalPosts}</p>
+                    <p className="font-body text-xs sm:text-sm text-muted-foreground mt-1 truncate">Updates & Blogs</p>
                 </div>
             </div>
 
             {/* Recent Inquiries */}
-            <div className="bg-card border border-border mb-8">
-                <div className="px-5 py-4 border-b border-border">
-                    <h2 className="font-display text-lg text-foreground tracking-wider">
+            <div className="bg-card border border-border mb-6 sm:mb-8">
+                <div className="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-border">
+                    <h2 className="font-display text-base sm:text-lg text-foreground tracking-wider">
                         Recent Inquiries
                     </h2>
                 </div>
                 <div className="divide-y divide-border">
                     {recentInquiries.length === 0 ? (
-                        <div className="px-5 py-4 text-muted-foreground">No inquiries yet.</div>
+                        <div className="px-4 sm:px-5 py-4 font-body text-sm text-muted-foreground">No inquiries yet.</div>
                     ) : (
                         recentInquiries.map((inq) => (
-                            <div key={inq.id} className="px-5 py-4 flex items-center justify-between">
-                                <div>
-                                    <p className="font-body text-sm font-bold text-foreground">
+                            <div key={inq.id} className="px-4 sm:px-5 py-3.5 sm:py-4 flex items-center justify-between gap-3">
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-body text-sm font-bold text-foreground truncate">
                                         {inq.name}
                                     </p>
-                                    <p className="font-body text-xs text-muted-foreground">
-                                        {inq.subject}
+                                    <p className="font-body text-xs text-muted-foreground truncate">
+                                        {inq.subject || "General Inquiry"}
                                     </p>
                                 </div>
-                                <p className="font-body text-xs text-muted-foreground">
+                                <p className="font-body text-xs text-muted-foreground shrink-0">
                                     {formatDate(inq.createdAt)}
                                 </p>
                             </div>
@@ -185,28 +185,34 @@ export function AdminOverview() {
 
             {/* Recent Reservations */}
             <div className="bg-card border border-border">
-                <div className="px-5 py-4 border-b border-border">
-                    <h2 className="font-display text-lg text-foreground tracking-wider">
+                <div className="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-border">
+                    <h2 className="font-display text-base sm:text-lg text-foreground tracking-wider">
                         Recent Reservations
                     </h2>
                 </div>
                 <div className="divide-y divide-border">
                     {recentReservations.length === 0 ? (
-                        <div className="px-5 py-4 text-muted-foreground">No reservations yet.</div>
+                        <div className="px-4 sm:px-5 py-4 font-body text-sm text-muted-foreground">No reservations yet.</div>
                     ) : (
                         recentReservations.map((res) => (
-                            <div key={res.id} className="px-5 py-4 flex items-center justify-between">
-                                <div>
-                                    <p className="font-body text-sm font-bold text-foreground">
+                            <div key={res.id} className="px-4 sm:px-5 py-3.5 sm:py-4 flex items-center justify-between gap-3">
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-body text-sm font-bold text-foreground truncate">
                                         {res.guestName}
                                     </p>
-                                    <p className="font-body text-xs text-muted-foreground">
+                                    <p className="font-body text-xs text-muted-foreground truncate">
                                         {res.roomType} • {formatDateRange(res.checkIn, res.checkOut)}
                                     </p>
                                 </div>
-                                <p className="font-body text-xs text-muted-foreground capitalize">
+                                <span className={`font-body text-[10px] uppercase px-2.5 py-0.5 rounded-full shrink-0 ${
+                                    res.status === "confirmed"
+                                        ? "bg-green-500/10 text-green-500 border border-green-500/20"
+                                        : res.status === "cancelled"
+                                        ? "bg-red-500/10 text-red-500 border border-red-500/20"
+                                        : "bg-hotel-gold/10 text-hotel-gold border border-hotel-gold/20"
+                                }`}>
                                     {res.status}
-                                </p>
+                                </span>
                             </div>
                         ))
                     )}

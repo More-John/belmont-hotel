@@ -38,6 +38,11 @@ export async function GET(request: Request) {
         }
 
         let posts = await prisma.post.findMany({
+            where: {
+                NOT: {
+                    category: '__room_config__',
+                },
+            },
             orderBy: { createdAt: 'desc' },
         });
 

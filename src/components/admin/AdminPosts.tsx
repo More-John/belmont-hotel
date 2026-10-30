@@ -8,10 +8,8 @@ import {
     Trash2,
     Eye,
     Calendar,
-    Tag,
     UploadCloud,
     Loader2,
-    CheckCircle2,
     FileText,
     Sparkles,
 } from "lucide-react";
@@ -75,8 +73,13 @@ export function AdminPosts() {
             const res = await fetch("/api/posts");
             if (res.ok) {
                 const data = await res.json();
-                if (Array.isArray(data) && data.length > 0) {
-                    setPosts(data);
+                if (Array.isArray(data)) {
+                    const visiblePosts = data.filter(
+                        (p: any) => p.category !== "__room_config__" && !String(p.slug || "").startsWith("room-config-")
+                    );
+                    if (visiblePosts.length > 0) {
+                        setPosts(visiblePosts);
+                    }
                 }
             }
         } catch (error) {
@@ -116,7 +119,7 @@ export function AdminPosts() {
         setIsModalOpen(true);
     };
 
-    // Upload an image directly to cPanel /api/images
+    // Upload an image directly to /api/images
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -246,13 +249,13 @@ export function AdminPosts() {
     });
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-5 sm:space-y-6 w-full min-w-0">
             {/* Header with Search and Create Button */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-hotel-dark p-6 rounded-lg border border-border">
-                <div>
-                    <h2 className="text-xl font-display text-hotel-white tracking-wide flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-hotel-gold" />
-                        Updates, Events & Blogs
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-hotel-dark p-4 sm:p-6 rounded-lg border border-border">
+                <div className="min-w-0">
+                    <h2 className="text-lg sm:text-xl font-display text-hotel-white tracking-wide flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-hotel-gold shrink-0" />
+                        <span className="truncate">Updates, Events & Blogs</span>
                     </h2>
                     <p className="text-xs text-hotel-white/60 mt-1">
                         Publish service announcements, upcoming events, and stories to keep your guests engaged.
@@ -260,7 +263,7 @@ export function AdminPosts() {
                 </div>
                 <Button
                     onClick={openCreateModal}
-                    className="bg-hotel-gold hover:bg-hotel-gold/90 text-hotel-black font-semibold text-xs tracking-wider flex items-center gap-2"
+                    className="w-full sm:w-auto min-h-[44px] bg-hotel-gold hover:bg-hotel-gold/90 text-hotel-black font-semibold text-xs tracking-wider flex items-center justify-center gap-2 shrink-0"
                 >
                     <Plus className="w-4 h-4" />
                     New Post / Update
@@ -268,14 +271,14 @@ export function AdminPosts() {
             </div>
 
             {/* Filter and Search Bar */}
-            <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 sm:gap-4">
                 {/* Category Pills */}
                 <div className="flex flex-wrap gap-2">
                     {CATEGORIES.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                            className={`px-3.5 py-2 min-h-[38px] rounded-full text-xs font-medium transition-all ${
                                 selectedCategory === cat
                                     ? "bg-hotel-gold text-hotel-black shadow-sm font-semibold"
                                     : "bg-hotel-dark text-hotel-white/70 hover:text-hotel-white border border-border/40"
@@ -287,14 +290,14 @@ export function AdminPosts() {
                 </div>
 
                 {/* Search input */}
-                <div className="relative min-w-[240px]">
+                <div className="relative w-full md:w-64">
                     <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-hotel-white/40" />
                     <input
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Search posts or events..."
-                        className="w-full bg-hotel-dark border border-border/50 rounded-lg pl-9 pr-4 py-1.5 text-xs text-hotel-white placeholder:text-hotel-white/40 focus:outline-none focus:border-hotel-gold"
+                        className="w-full bg-hotel-dark border border-border/50 rounded-lg pl-9 pr-4 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white placeholder:text-hotel-white/40 focus:outline-none focus:border-hotel-gold"
                     />
                 </div>
             </div>
@@ -306,17 +309,17 @@ export function AdminPosts() {
                     <span>Loading updates & blog posts...</span>
                 </div>
             ) : filteredPosts.length === 0 ? (
-                <div className="text-center py-20 bg-hotel-dark/40 rounded-lg border border-border/40 p-8">
+                <div className="text-center py-16 sm:py-20 bg-hotel-dark/40 rounded-lg border border-border/40 p-6 sm:p-8">
                     <FileText className="w-12 h-12 text-hotel-gold/40 mx-auto mb-3" />
                     <h3 className="text-base text-hotel-white font-medium">No posts or updates found</h3>
                     <p className="text-xs text-hotel-white/50 mt-1 max-w-md mx-auto">
                         {searchTerm || selectedCategory !== "All"
                             ? "Try adjusting your search query or category filters."
-                            : "Click 'New Post / Update' above to create your first event, news, or blog article."}
+                            : "Tap 'New Post / Update' above to create your first event, news, or blog article."}
                     </p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {filteredPosts.map((post) => (
                         <div
                             key={post.id}
@@ -361,15 +364,15 @@ export function AdminPosts() {
                                                 ? "bg-emerald-600/90 text-hotel-white hover:bg-emerald-700"
                                                 : "bg-gray-600/90 text-hotel-white/80 hover:bg-gray-700"
                                         }`}
-                                        title="Click to toggle publish status"
+                                        title="Tap to toggle publish status"
                                     >
                                         {post.status}
                                     </button>
                                 </div>
 
                                 {/* Post Body */}
-                                <div className="p-5 space-y-2">
-                                    <div className="flex items-center gap-3 text-[11px] text-hotel-white/40">
+                                <div className="p-4 sm:p-5 space-y-2">
+                                    <div className="flex items-center flex-wrap gap-2 sm:gap-3 text-[11px] text-hotel-white/40">
                                         <span className="flex items-center gap-1">
                                             <Calendar className="w-3 h-3" />
                                             {new Date(post.createdAt).toLocaleDateString(undefined, {
@@ -400,35 +403,35 @@ export function AdminPosts() {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="p-4 border-t border-border/30 flex items-center justify-between bg-black/20">
-                                <span className="text-[10px] text-hotel-white/40 italic">By {post.author}</span>
-                                <div className="flex items-center gap-1">
+                            <div className="px-4 py-3 border-t border-border/30 flex items-center justify-between bg-black/20">
+                                <span className="text-[11px] text-hotel-white/40 italic truncate mr-2">By {post.author}</span>
+                                <div className="flex items-center gap-1 shrink-0">
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => setPreviewPost(post)}
-                                        className="h-7 w-7 text-hotel-white/70 hover:text-hotel-white hover:bg-white/10"
+                                        className="h-9 w-9 sm:h-8 sm:w-8 text-hotel-white/70 hover:text-hotel-white hover:bg-white/10"
                                         title="Preview Post"
                                     >
-                                        <Eye className="w-3.5 h-3.5" />
+                                        <Eye className="w-4 h-4" />
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => openEditModal(post)}
-                                        className="h-7 w-7 text-hotel-gold hover:text-hotel-gold hover:bg-hotel-gold/10"
+                                        className="h-9 w-9 sm:h-8 sm:w-8 text-hotel-gold hover:text-hotel-gold hover:bg-hotel-gold/10"
                                         title="Edit Post"
                                     >
-                                        <Edit2 className="w-3.5 h-3.5" />
+                                        <Edit2 className="w-4 h-4" />
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => handleDelete(post.id)}
-                                        className="h-7 w-7 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
+                                        className="h-9 w-9 sm:h-8 sm:w-8 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
                                         title="Delete Post"
                                     >
-                                        <Trash2 className="w-3.5 h-3.5" />
+                                        <Trash2 className="w-4 h-4" />
                                     </Button>
                                 </div>
                             </div>
@@ -439,9 +442,9 @@ export function AdminPosts() {
 
             {/* Modal for Create / Edit */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="max-w-2xl bg-hotel-dark border-border text-hotel-white max-h-[90vh] overflow-y-auto">
+                <DialogContent className="w-[95vw] max-w-2xl bg-hotel-dark border-border text-hotel-white max-h-[90dvh] overflow-y-auto p-4 sm:p-6">
                     <DialogHeader>
-                        <DialogTitle className="font-display text-lg text-hotel-gold">
+                        <DialogTitle className="font-display text-base sm:text-lg text-hotel-gold">
                             {editingPost ? "Edit Post / Update" : "Create New Post / Event"}
                         </DialogTitle>
                         <DialogDescription className="text-xs text-hotel-white/60">
@@ -461,7 +464,7 @@ export function AdminPosts() {
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="e.g., Grand Poolside BBQ & Live Acoustic Night"
-                                className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                className="w-full bg-black/40 border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                             />
                         </div>
 
@@ -474,7 +477,7 @@ export function AdminPosts() {
                                 <select
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
-                                    className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                    className="w-full bg-black border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                                 >
                                     <option value="Service Update">Service Update</option>
                                     <option value="Event">Event</option>
@@ -490,7 +493,7 @@ export function AdminPosts() {
                                 <select
                                     value={status}
                                     onChange={(e) => setStatus(e.target.value as any)}
-                                    className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                    className="w-full bg-black border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                                 >
                                     <option value="published">Published</option>
                                     <option value="draft">Draft (Hidden)</option>
@@ -505,7 +508,7 @@ export function AdminPosts() {
                                     type="datetime-local"
                                     value={eventDate}
                                     onChange={(e) => setEventDate(e.target.value)}
-                                    className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                    className="w-full bg-black/40 border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                                 />
                             </div>
                         </div>
@@ -515,13 +518,13 @@ export function AdminPosts() {
                             <label className="block text-xs font-medium text-hotel-white/80 mb-1">
                                 Featured Image
                             </label>
-                            <div className="flex gap-2 items-center">
+                            <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                                 <input
                                     type="text"
                                     value={imageUrl}
                                     onChange={(e) => setImageUrl(e.target.value)}
                                     placeholder="/uploads/my-event.jpg or https://..."
-                                    className="flex-1 bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                    className="flex-1 bg-black/40 border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                                 />
                                 <input
                                     type="file"
@@ -536,12 +539,12 @@ export function AdminPosts() {
                                     size="sm"
                                     disabled={uploadingImage}
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="border-hotel-gold/50 text-hotel-gold hover:bg-hotel-gold/10 text-xs flex items-center gap-1.5"
+                                    className="w-full sm:w-auto min-h-[42px] border-hotel-gold/50 text-hotel-gold hover:bg-hotel-gold/10 text-xs flex items-center justify-center gap-1.5 shrink-0"
                                 >
                                     {uploadingImage ? (
-                                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                        <Loader2 className="w-4 h-4 animate-spin" />
                                     ) : (
-                                        <UploadCloud className="w-3.5 h-3.5" />
+                                        <UploadCloud className="w-4 h-4" />
                                     )}
                                     Upload File
                                 </Button>
@@ -563,7 +566,7 @@ export function AdminPosts() {
                                 value={excerpt}
                                 onChange={(e) => setExcerpt(e.target.value)}
                                 placeholder="Brief 1-2 sentence preview for cards and feeds"
-                                className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                className="w-full bg-black/40 border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                             />
                         </div>
 
@@ -574,11 +577,11 @@ export function AdminPosts() {
                             </label>
                             <textarea
                                 required
-                                rows={8}
+                                rows={7}
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder="Write the full announcement, event schedule, package perks, or blog text here..."
-                                className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold leading-relaxed"
+                                className="w-full bg-black/40 border border-border rounded px-3 py-2.5 text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold leading-relaxed"
                             />
                         </div>
 
@@ -592,24 +595,24 @@ export function AdminPosts() {
                                 value={author}
                                 onChange={(e) => setAuthor(e.target.value)}
                                 placeholder="e.g. Belmont Hotel Concierge"
-                                className="w-full bg-black/40 border border-border rounded px-3 py-2 text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
+                                className="w-full bg-black/40 border border-border rounded px-3 py-2.5 min-h-[42px] text-base sm:text-xs text-hotel-white focus:outline-none focus:border-hotel-gold"
                             />
                         </div>
 
                         {/* Submit Button */}
-                        <div className="flex justify-end gap-2 pt-3 border-t border-border/40">
+                        <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-border/40">
                             <Button
                                 type="button"
                                 variant="ghost"
                                 onClick={() => setIsModalOpen(false)}
-                                className="text-xs text-hotel-white/70 hover:text-hotel-white"
+                                className="w-full sm:w-auto min-h-[44px] text-xs text-hotel-white/70 hover:text-hotel-white"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={submitting}
-                                className="bg-hotel-gold hover:bg-hotel-gold/90 text-hotel-black font-semibold text-xs tracking-wider flex items-center gap-1.5"
+                                className="w-full sm:w-auto min-h-[44px] bg-hotel-gold hover:bg-hotel-gold/90 text-hotel-black font-semibold text-xs tracking-wider flex items-center justify-center gap-1.5"
                             >
                                 {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                                 {editingPost ? "Update Post" : "Publish Post"}
@@ -621,11 +624,11 @@ export function AdminPosts() {
 
             {/* Modal for Preview */}
             <Dialog open={!!previewPost} onOpenChange={() => setPreviewPost(null)}>
-                <DialogContent className="max-w-2xl bg-hotel-dark border-border text-hotel-white max-h-[85vh] overflow-y-auto">
+                <DialogContent className="w-[95vw] max-w-2xl bg-hotel-dark border-border text-hotel-white max-h-[85dvh] overflow-y-auto p-4 sm:p-6">
                     {previewPost && (
                         <div className="space-y-4">
                             {previewPost.imageUrl && (
-                                <div className="h-60 w-full rounded-lg overflow-hidden border border-border">
+                                <div className="h-48 sm:h-60 w-full rounded-lg overflow-hidden border border-border">
                                     <img
                                         src={previewPost.imageUrl}
                                         alt={previewPost.title}
@@ -641,8 +644,8 @@ export function AdminPosts() {
                                     {new Date(previewPost.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
-                            <h2 className="font-display text-2xl text-hotel-white">{previewPost.title}</h2>
-                            <div className="text-xs text-hotel-white/80 whitespace-pre-wrap leading-relaxed border-t border-border/40 pt-4">
+                            <h2 className="font-display text-xl sm:text-2xl text-hotel-white break-words">{previewPost.title}</h2>
+                            <div className="text-xs sm:text-sm text-hotel-white/80 whitespace-pre-wrap leading-relaxed border-t border-border/40 pt-4 break-words">
                                 {previewPost.content}
                             </div>
                             <p className="text-[11px] text-hotel-white/40 pt-4 border-t border-border/20 italic">

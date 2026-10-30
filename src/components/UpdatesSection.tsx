@@ -24,8 +24,13 @@ export function UpdatesSection() {
                 const res = await fetch("/api/posts?status=published");
                 if (res.ok) {
                     const data = await res.json();
-                    if (Array.isArray(data) && data.length > 0) {
-                        setPosts(data);
+                    if (Array.isArray(data)) {
+                        const visiblePosts = data.filter(
+                            (p: any) => p.category !== "__room_config__" && !String(p.slug || "").startsWith("room-config-")
+                        );
+                        if (visiblePosts.length > 0) {
+                            setPosts(visiblePosts);
+                        }
                     }
                 }
             } catch (err) {
